@@ -73,7 +73,7 @@ function LoginForm(props) {
       </p>
       <p>
         <label>
-          pasword:{" "}
+          password:{" "}
           <input
             name="password"
             value={password.value}
