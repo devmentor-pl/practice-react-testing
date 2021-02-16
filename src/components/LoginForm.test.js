@@ -1,4 +1,4 @@
-import { getByText, render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LoginForm from "./LoginForm";
 
@@ -38,6 +38,28 @@ describe("LoginForm", () => {
 
     expect(loginInput).toBeInTheDocument();
     expect(tryAuthMock).toBeCalledWith(correctLogin, correctPassword);
+  });
+
+  test("submit throws no error if login and password are correct and tryAuth is async", async () => {
+    const tryAuthMockPromise = jest.fn();
+    tryAuthMockPromise.mockResolvedValue(true);
+
+    const correctLogin = "correctLogin";
+    const correctPassword = "correctPassword";
+
+    render(<LoginForm tryAuth={tryAuthMockPromise} />);
+
+    const loginInput = screen.getByLabelText(/login/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole("button", { name: /send/i });
+
+    userEvent.type(loginInput, correctLogin);
+    userEvent.type(passwordInput, correctPassword);
+
+    await userEvent.click(submitButton);
+
+    expect(await screen.findByLabelText(/login/i)).toBeInTheDocument();
+    expect(tryAuthMockPromise).toBeCalledWith(correctLogin, correctPassword);
   });
 
   test("submit throws error if login is too short", async () => {
