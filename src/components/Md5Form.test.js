@@ -2,17 +2,16 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import Md5Form from "./Md5Form";
 import { getMd5 } from "../providers/md5Provider";
 import userEvent from "@testing-library/user-event";
-import { md5ProviderFetchResolvedOnce, md5Value } from "../testUtils/utils";
-// import * as md5Module from "../providers/md5Provider";
+import { md5ProviderFetchResolvedOnce } from "../testUtils/utils";
 
-// jest.spyOn(md5Module, "getMd5");
+const md5Value = "098f6bcd4621d373cade4e832627b4f6";
 
 jest.spyOn(window, "fetch");
 
 describe("Md5Form", () => {
   test("submit fetch data", async () => {
     const data = "test";
-    md5ProviderFetchResolvedOnce(window.fetch);
+    md5ProviderFetchResolvedOnce(window.fetch, md5Value);
 
     render(<Md5Form getMd5={getMd5} />);
 
@@ -55,7 +54,7 @@ describe("Md5Form", () => {
     const oldData = "test";
     const newData = "data";
 
-    md5ProviderFetchResolvedOnce(window.fetch);
+    md5ProviderFetchResolvedOnce(window.fetch, md5Value);
 
     render(<Md5Form getMd5={getMd5} />);
 
