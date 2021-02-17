@@ -1,5 +1,6 @@
-import { act, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import CatchError from "./CatchError";
 import LoginForm from "./LoginForm";
 
 describe("LoginForm", () => {
@@ -69,7 +70,11 @@ describe("LoginForm", () => {
     const wrongLogin = "123";
     const correctPassword = "correctPassword";
 
-    render(<LoginForm tryAuth={tryAuthMockPromise} />);
+    render(
+      <CatchError>
+        <LoginForm tryAuth={tryAuthMockPromise} />
+      </CatchError>
+    );
 
     const loginInput = screen.getByLabelText(/login/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -78,10 +83,11 @@ describe("LoginForm", () => {
     userEvent.type(loginInput, wrongLogin);
     userEvent.type(passwordInput, correctPassword);
 
-    expect(() => {
-      userEvent.click(submitButton);
-    }).toThrowError();
+    userEvent.click(submitButton);
 
+    const text = await screen.findByText(/incorrect data/i);
+
+    expect(text).toBeInTheDocument();
     expect(tryAuthMockPromise).toBeCalledWith(wrongLogin, correctPassword);
   });
 });
