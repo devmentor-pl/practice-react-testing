@@ -23,8 +23,13 @@ function LoginForm(props) {
     function handleChange(e) {
         const {name: field, value} = e.target;
         if(typeof user[field] !== 'undefined') {
-            checkValue(value);
-            setUser({...user, [field]: {value, error: ''} });
+            try {
+                checkValue(value);
+                setUser({...user, [field]: {value, error: ''} });
+            }
+            catch(error) {
+                setUser({...user, [field]: {value, error: error.message} });                
+            }
         }
     }
 
