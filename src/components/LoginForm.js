@@ -13,6 +13,7 @@ function LoginForm(props) {
     }
 
     const [user, setUser] = useState(userDefault);
+    const [hasError, setHasError] = useState(null);
 
     function checkValue(value) {
         if(value.length <= 3)  {
@@ -44,11 +45,13 @@ function LoginForm(props) {
         const {login, password} = e.target.elements;
 
         const authResp = tryAuth(login.value, password.value);
-        if(typeof authResp.then === 'function') { // if return Promise
-            authResp.catch(() => throwError() );
-        } else if(!authResp) {
-            throwError()
-        }
+        if (typeof authResp.then === 'function') {
+			// if return Promise
+			// authResp.catch(() => throwError() );
+			authResp.catch(() => setHasError(true));
+		} else if (!authResp) {
+			setHasError(true);
+		}
     }
 
     const {login, password} = user;
