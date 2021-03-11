@@ -37,9 +37,8 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-native": "^4.0.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6"
-  },
-  "jest": {
-    "setupTestFrameworkScriptFile": "./test/setupTests.js" }
+  }
 }
