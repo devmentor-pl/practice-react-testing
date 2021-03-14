@@ -15,6 +15,10 @@ function LoginForm(props) {
     const [user, setUser] = useState(userDefault);
     const [hasError, setHasError] = useState(null);
 
+    if (hasError) {
+		throwError();
+	}
+
     function checkValue(value) {
         if(value.length <= 3)  {
             throw new Error('The field is too short!');
@@ -46,8 +50,6 @@ function LoginForm(props) {
 
         const authResp = tryAuth(login.value, password.value);
         if (typeof authResp.then === 'function') {
-			// if return Promise
-			// authResp.catch(() => throwError() );
 			authResp.catch(() => setHasError(true));
 		} else if (!authResp) {
 			setHasError(true);
