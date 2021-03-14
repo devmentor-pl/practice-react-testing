@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import LoginForm from '../components/LoginForm';
+import CatchError from '../components/CatchError';
 import userEvent from '@testing-library/user-event';
 
 // żeby nie powtarzać inputa (stąd: https://testing-library.com/docs/example-input-event/)
@@ -38,9 +39,15 @@ it('removes error when value is correct', async () => {
 	expect(error).not.toBeInTheDocument();
 });
 
-it('returns 0 when no values passed', async () => {
-	render(<LoginForm />);
+it('returns false when no values passed', async () => {
+	const tryAuthMock = jest.fn();
+	tryAuthMock.mockReturnValueOnce(false);
+	render(
+		<CatchError>
+			<LoginForm tryAuth={tryAuthMock} />
+		</CatchError>
+	);
 	const submitBtn = screen.getByRole('button', { name: /send/i });
 	userEvent.click(submitBtn);
-	expect(jest.fn()).toHaveBeenLastCalledWith('', '');
+	expect(tryAuthMock).toHaveBeenLastCalledWith('', '');
 });
