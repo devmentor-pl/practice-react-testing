@@ -39,7 +39,7 @@ it('removes error when value is correct', async () => {
 	expect(error).not.toBeInTheDocument();
 });
 
-it('returns false when no values passed', async () => {
+it('returns false when no values passed', () => {
 	const tryAuthMock = jest.fn();
 	tryAuthMock.mockReturnValueOnce(false);
 	render(
