@@ -16,22 +16,26 @@ const Md5Form = ({getMd5}) => {
     }
 
     return (
-        <section>
-            <form onSubmit={handleSubmit}>
-                <p>
-                    <label>
-                        <input value={text} onChange={handleChange} />
-                    </label>
-                </p>
-                <p><button>send</button></p>
-            </form>
-            <p>
-                <span className="data-text">{text}</span>
-                { md5 && <span>=&gt;</span> }
-                <strong className="data-md5">{md5}</strong>
-            </p>
-        </section>
-    );
+		<section>
+			<form onSubmit={handleSubmit}>
+				<p>
+					<label>
+						<input value={text} onChange={handleChange} />
+					</label>
+				</p>
+				<p>
+					<button>send</button>
+				</p>
+			</form>
+			<p>
+				<span className="data-text">{text}</span>
+				{md5 && <span>=&gt;</span>}
+				<strong className="data-md5" data-testid="data-md5">
+					{md5}
+				</strong>
+			</p>
+		</section>
+	);
 };
 
 export default Md5Form;
