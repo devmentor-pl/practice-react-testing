@@ -1,4 +1,5 @@
 import React from 'react';
+import CatchError from './components/CatchError';
 import LoginForm from './components/LoginForm';
 
 const Task01 = () => {
@@ -8,9 +9,11 @@ const Task01 = () => {
 
     return (
         <section>
-            <h1>Task01</h1>
-            <LoginForm tryAuth={ tryAuth }/>
-        </section>
+                <h1>Task01</h1>
+                <CatchError>
+                    <LoginForm tryAuth={ tryAuth }/>
+                </CatchError>
+            </section>
     );
 };
 
