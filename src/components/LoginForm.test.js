@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginForm from './LoginForm';
+import CatchError from './CatchError';
 
 const setup = () => render (<LoginForm />);
 
@@ -45,24 +46,47 @@ describe(`<LoginForm />`, () => {
     });
 
     test('throws if user submits with error', async () => {
+        expect.assertions(4);
 
-            const authMock = jest.fn();
-            authMock.mockReturnValue(false);
+        const authMock = jest.fn();
+        authMock.mockReturnValue(false);
 
-            render(<LoginForm tryAuth={authMock} />);
-            const login = screen.getByLabelText(/login/i);
-            userEvent.type(login, 'x');          
-            const submitButton = screen.getByRole('button', 'send');
-            const alert = await screen.findByText(/must be longer than 3/i);
+        render(<LoginForm tryAuth={authMock} />);
+        const login = screen.getByLabelText(/login/i);
+        userEvent.type(login, 'xs');          
+        const submitButton = screen.getByRole('button', { name: /send/i });
+        const alert = await screen.findByText(/must be longer than 3/i);
 
-            expect(alert).toBeInTheDocument();
-            expect(() => {
-                userEvent.click(submitButton);
-            }).toThrow();
-            expect(authMock).toBeCalledWith('x', '');
+        expect(alert).toBeInTheDocument();
+        expect(() => {
+            userEvent.click(submitButton);
+        }).toThrow();
+
+        
+        expect(authMock).toBeCalledWith('xs', '');
+        expect(authMock).toHaveBeenCalledTimes(1);
     });
+    test('does not throw if form data is correct', async () => {
+        const okLogin = 'Martin';
+        const okPassword = 'xac)ASd__@';
 
-    test('', () => {
- 
+        const authMock = jest.fn();
+        authMock.mockReturnValue(true);
+
+        render(<LoginForm tryAuth={authMock} />);
+        const login = screen.getByLabelText(/login/i);
+        const password = screen.getByLabelText(/pasword/i);
+        const submitButton = screen.getByRole('button', { name: /send/i });
+        
+        userEvent.type(login, okLogin);
+        userEvent.type(password, okPassword);
+
+        const alert = await screen.queryByText(/must be longer than 3/i);
+        
+        expect.assertions(2);
+        expect(() => {
+            userEvent.click(submitButton);
+        }).not.toThrow();
+        expect(alert).not.toBeInTheDocument();
     });
 });

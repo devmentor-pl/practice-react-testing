@@ -34,11 +34,6 @@ function LoginForm(props) {
     }
 
     if (err) {
-        throwError();
-
-    }
-
-    function throwError() {
         throw new Error('Incorrect data!');
     }
 
