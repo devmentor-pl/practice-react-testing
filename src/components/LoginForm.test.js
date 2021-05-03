@@ -1,11 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginForm from './LoginForm';
-import CatchError from './CatchError';
 
 const setup = () => render (<LoginForm />);
 
-describe(`<LoginForm />`, () => {
+xdescribe(`<LoginForm />`, () => {
     test('should contain login field', () => {
         setup();
         const loginInput = screen.getByLabelText(/login/i);
