@@ -14,7 +14,7 @@ const setup = () => {
     return {
         input,
         submitBtn,
-        ...dom
+        dom
     }
 }
 
