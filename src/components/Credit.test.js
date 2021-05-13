@@ -4,6 +4,12 @@ import Credit from './Card';
 
 jest.spyOn(window, 'fetch');
 
+const visaCardNr = '4925560031063347';
+const masterCardNr = '5105105105105100';
+const amExNr = '371449635398431';
+const incorrectNr = '222222222222222'
+
+
 const setup = () => {
     const credit = render(<Credit />);
     const creditInput = screen.getByPlaceholderText('13-16 digits');
@@ -21,17 +27,51 @@ describe('<Credit />', () => {
         expect(submitBtn).toBeInTheDocument();
     });
     
-    test('should identiy and display VISA', async () => {
+    test('should identiy Visa as Visa', async () => {
         const { submitBtn, creditInput } = setup();
-
-        const visaCardNr = '4925560031063347';
-
+    
         userEvent.type(creditInput, visaCardNr);
         userEvent.click(submitBtn);
 
-        const cardProvider = await screen.findByText('VISA');
+        const cardProvider = screen.getByText(`Your card is Visa`);
         
         expect(cardProvider).toBeInTheDocument();
+    });
+    
+    test('should identiy MasterCard as MasterCard', async () => {
+        const { submitBtn, creditInput } = setup();
+
+        userEvent.type(creditInput, masterCardNr);
+        userEvent.click(submitBtn);
+
+        const cardProvider = screen.getByText(`Your card is MasterCard`);
+        
+        expect(cardProvider).toBeInTheDocument();
+    });
+
+    test('should identiy AmEx as AmEx', async () => {
+        const { submitBtn, creditInput } = setup();
+        
+
+        userEvent.type(creditInput, amExNr);
+        userEvent.click(submitBtn);
+
+        const cardProvider = screen.getByText(`Your card is AmEx`);
+        
+        expect(cardProvider).toBeInTheDocument();
+    });
+
+    test('should display error if invalid number is passed', async () => {
+        const { submitBtn, creditInput } = setup();
+
+        userEvent.type(creditInput, incorrectNr);
+        userEvent.click(submitBtn);
+
+        const cardProvider = screen.queryByText(`Your card is`);
+        const errorMessage = screen.getByText(`Invalid card number`);
+        
+        expect(errorMessage).toBeInTheDocument();
+        expect(cardProvider).not.toBeInTheDocument();
     });
     
     

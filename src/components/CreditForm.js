@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 const CreditForm = ({getIssuer}) => {
 	const [cardNr, setCardNr] = useState('');
-	const [cardIssuer, setCardIssuer] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,7 +28,6 @@ const CreditForm = ({getIssuer}) => {
 				onChange={ e => handleInput(e.target.value) }
 				value={ cardNr }
 			/>
-            <p>{ cardIssuer }</p>
             <br />
 			<button name="submit" type='submit'>Submit</button>
 		</form>
