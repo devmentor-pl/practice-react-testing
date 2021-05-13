@@ -33,7 +33,7 @@ describe('<Credit />', () => {
         userEvent.type(creditInput, visaCardNr);
         userEvent.click(submitBtn);
 
-        const cardProvider = screen.getByText(`Your card is Visa`);
+        const cardProvider = await screen.findByText(`Your card is Visa`);
         
         expect(cardProvider).toBeInTheDocument();
     });
@@ -44,7 +44,7 @@ describe('<Credit />', () => {
         userEvent.type(creditInput, masterCardNr);
         userEvent.click(submitBtn);
 
-        const cardProvider = screen.getByText(`Your card is MasterCard`);
+        const cardProvider = await screen.findByText(`Your card is MasterCard`);
         
         expect(cardProvider).toBeInTheDocument();
     });
@@ -52,36 +52,24 @@ describe('<Credit />', () => {
     test('should identiy AmEx as AmEx', async () => {
         const { submitBtn, creditInput } = setup();
         
-
         userEvent.type(creditInput, amExNr);
         userEvent.click(submitBtn);
 
-        const cardProvider = screen.getByText(`Your card is AmEx`);
+        const cardProvider = await screen.findByText(`Your card is AmEx`);
         
         expect(cardProvider).toBeInTheDocument();
     });
 
-    test('should display error if invalid number is passed', async () => {
+    test('should display error message if invalid number is passed', async () => {
         const { submitBtn, creditInput } = setup();
 
         userEvent.type(creditInput, incorrectNr);
         userEvent.click(submitBtn);
 
         const cardProvider = screen.queryByText(`Your card is`);
-        const errorMessage = screen.getByText(`Invalid card number`);
+        const errorMessage = await screen.findByText(`Invalid card number`);
         
         expect(errorMessage).toBeInTheDocument();
         expect(cardProvider).not.toBeInTheDocument();
     });
-    
-    
 });
-
-// 4111111111111111
-// Card Type: Visa
-// Card Length: 16
-// Card Name: Kylie Jenkins
-// Card Number: 4539803757146088
-// Card Number: 10 18 0 14 14 8 0 16 = 35
-// Card Expiration: 8 / 2035 (Month / Year)
-// Card CVV: 961

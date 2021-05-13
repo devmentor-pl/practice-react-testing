@@ -18,7 +18,7 @@ const setup = () => {
     }
 }
 
-xdescribe('Md5Form', () => {
+describe('Md5Form', () => {
     test('should render input on the page', () => {
         const { input } = setup();
         expect(input).toBeInTheDocument();

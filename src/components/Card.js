@@ -35,7 +35,6 @@ const Card = () => {
                 }
 				return;
 			case 15:
-                console.log(twoFirstCardDigits);
                 if (twoFirstCardDigits === 34 || twoFirstCardDigits === 37) {
                     setCardIssuer('AmEx')
                 }

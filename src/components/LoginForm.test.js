@@ -3,8 +3,9 @@ import userEvent from '@testing-library/user-event';
 import LoginForm from './LoginForm';
 
 const setup = () => render (<LoginForm />);
+jest.spyOn(console, 'error');
 
-xdescribe(`<LoginForm />`, () => {
+describe(`<LoginForm />`, () => {
     test('should contain login field', () => {
         setup();
         const loginInput = screen.getByLabelText(/login/i);
