@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
 const CreditForm = ({getIssuer}) => {
-console.log('🚀 ~ CreditForm ~ getIssuer', getIssuer)
-
 	const [cardNr, setCardNr] = useState('');
 	const [cardIssuer, setCardIssuer] = useState('');
 

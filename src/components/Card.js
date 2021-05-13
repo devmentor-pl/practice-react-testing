@@ -2,52 +2,41 @@ import React, { useState } from 'react';
 import CreditForm from './CreditForm';
 
 const Card = () => {
-    const [cardNr, setCardNr] = useState('');
     const [ error, setError ] = useState('');
     const [ cardIssuer, setCardIssuer ] = useState('');
 
     const validateCredit = (number) => {
-        const oddDigitsSum = number
+
+        const oddDgtSum = number
 			.split('')
 			.reverse()
 			.filter((d, i) => i % 2 !== 1)
-			.map(d => d.toString().split(''))
-            .flat()
             .map(d => parseInt(d))
 			.reduce((a, b) => a + b);
             
-            const evenDigitsSum = number
-            .split('')
-            .reverse()
+        const evenDgtSum = number
+			.split('')
+			.reverse()
 			.filter((d, i) => i % 2 === 1)
 			.map(d => (d * 2).toString().split(''))
+			.flat()
             .map(d => parseInt(d))
-			.reduce((a, b) => a + b);            
-        
-        console.log('🚀 ~ validateCredit ~ oddDigitsSum', oddDigitsSum)
-        console.log('🚀 ~ validateCredit ~ evenDigitsSum', evenDigitsSum)
+            .reduce((a, b) => a + b);
 
-        const controlSum = oddDigitsSum + evenDigitsSum;    
         
-        if (controlSum % 10 !== 0) {
-            setError('Invalid card number');
-        }
-        console.log(controlSum);
+        console.log('🚀 ~ validateCredit ~ oddDigitsSum', oddDgtSum);
+        console.log('🚀 ~ validateCredit ~ evenDigitsSum', evenDgtSum);
 
-        // switch (controlSum) {
-        //     case 
-                
-        //         break;
+        // const controlSum = oddDigitsSum + evenDigitsSum;    
         
-        //     default:
-        //         break;
+        // if (controlSum % 10 !== 0) {
+        //     setError('Invalid card number');
         // }
-
     };
 
-    // const getCardIssuer = () => {
-    //     console.log('getting card issuer');
-    // };    
+    if (cardIssuer) {
+        return <h1>`Your card is ${cardIssuer}`</h1>
+    }
     if (error) {
         return <h1>Wrong card number</h1>
     } 
