@@ -1,11 +1,11 @@
 import React from 'react';
-import Credit from './components/Credit';
+import Card from './components/Card';
 
 const Task05 = () => {
     return (
         <section>
             <h1>Task05</h1>
-            <Credit />
+            <Card />
         </section>
     );
 };

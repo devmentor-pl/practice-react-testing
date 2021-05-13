@@ -1,6 +1,8 @@
-import { getByLabelText, getByPlaceholderText, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Credit from './Credit';
+import Credit from './Card';
+
+jest.spyOn(window, 'fetch');
 
 const setup = () => {
     const credit = render(<Credit />);
@@ -22,10 +24,9 @@ describe('<Credit />', () => {
     test('should identiy and display VISA', async () => {
         const { submitBtn, creditInput } = setup();
 
-        const visaCardNr = '4539803757146088';
+        const visaCardNr = '4925560031063347';
 
         userEvent.type(creditInput, visaCardNr);
-        screen.debug();
         userEvent.click(submitBtn);
 
         const cardProvider = await screen.findByText('VISA');
@@ -36,10 +37,11 @@ describe('<Credit />', () => {
     
 });
 
-
+// 4111111111111111
 // Card Type: Visa
 // Card Length: 16
 // Card Name: Kylie Jenkins
 // Card Number: 4539803757146088
+// Card Number: 10 18 0 14 14 8 0 16 = 35
 // Card Expiration: 8 / 2035 (Month / Year)
 // Card CVV: 961
