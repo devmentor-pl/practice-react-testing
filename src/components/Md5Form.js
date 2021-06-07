@@ -27,7 +27,7 @@ const Md5Form = ({getMd5}) => {
             </form>
             <p>
                 <span className="data-text">{text}</span>
-                { md5 && <span>=&gt;</span> }
+                { md5 && <span> =&gt; </span> }
                 <strong className="data-md5">{md5}</strong>
             </p>
         </section>
