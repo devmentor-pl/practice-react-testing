@@ -9,7 +9,6 @@ const Auth = () => {
     async function findUser(login, password) {
         const md5 = await getMd5(password);
 
-        console.log(md5, login);
 
         const userFromDB = users.find(u => u.login === login && u.password === md5);
         if(userFromDB) {

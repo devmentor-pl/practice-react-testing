@@ -2,6 +2,18 @@ import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginForm from '../components/LoginForm';
 
+
+const original = console.error
+
+beforeEach(() => {
+	console.error = jest.fn()
+})
+
+afterEach(() => {
+	console.error('you cant see me')
+	console.error = original
+})
+
 describe('Test loging form', () => {
 	it('should contain password input', function () {
 		render(<LoginForm />);
