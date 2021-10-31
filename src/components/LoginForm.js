@@ -13,6 +13,7 @@ function LoginForm(props) {
     }
 
     const [user, setUser] = useState(userDefault);
+    const [err, setError] = useState(false);
 
     function checkValue(value) {
         if(value.length <= 3)  {
@@ -23,8 +24,12 @@ function LoginForm(props) {
     function handleChange(e) {
         const {name: field, value} = e.target;
         if(typeof user[field] !== 'undefined') {
+            try {
             checkValue(value);
             setUser({...user, [field]: {value, error: ''} });
+            } catch (e) {
+                setUser({...user, [field]: {value, error: e.message } });
+            }
         }
     }
 
@@ -40,10 +45,14 @@ function LoginForm(props) {
 
         const authResp = tryAuth(login.value, password.value);
         if(typeof authResp.then === 'function') { // if return Promise
-            authResp.catch(() => throwError() );
+            authResp.catch(() => setError(true) );
         } else if(!authResp) {
-            throwError()
+            setError(true);
         }
+    }
+
+    if(err) {
+        throwError();
     }
 
     const {login, password} = user;
@@ -57,7 +66,7 @@ function LoginForm(props) {
             </p>
             <p>
                 <label>
-                    pasword: <input name="password" value={ password.value } onChange={e => handleChange(e)} />
+                    password: <input name="password" value={ password.value } onChange={e => handleChange(e)} />
                     { password.error && <strong>{ password.error }</strong> }
                 </label>
             </p>
