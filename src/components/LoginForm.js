@@ -13,6 +13,7 @@ function LoginForm(props) {
     };
 
     const [user, setUser] = useState(userDefault);
+    const [hasError, setError] = useState(false);
 
     function checkValue(value) {
         if (value.length <= 3) {
@@ -32,7 +33,7 @@ function LoginForm(props) {
         }
     }
 
-    function throwError() {
+    if (hasError) {
         throw new Error("Incorrect data!");
     }
 
@@ -45,9 +46,10 @@ function LoginForm(props) {
         const authResp = tryAuth(login.value, password.value);
         if (typeof authResp.then === "function") {
             // if return Promise
-            authResp.catch(() => throwError());
-        } else if (!authResp) {
-            throwError();
+            authResp.catch(() => setError(true));
+        }
+        if (!authResp) {
+            setError(true);
         }
     }
 
