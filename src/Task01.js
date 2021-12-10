@@ -1,5 +1,5 @@
-import React from 'react';
-import LoginForm from './components/LoginForm';
+import React from "react";
+import LoginForm from "./components/LoginForm";
 
 const Task01 = () => {
     function tryAuth(login, password) {
@@ -9,7 +9,7 @@ const Task01 = () => {
     return (
         <section>
             <h1>Task01</h1>
-            <LoginForm tryAuth={ tryAuth }/>
+            <LoginForm tryAuth={tryAuth} />
         </section>
     );
 };
