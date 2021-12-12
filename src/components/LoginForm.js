@@ -55,7 +55,7 @@ function LoginForm(props) {
 
     const { login, password } = user;
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-testid="form">
             <p>
                 <label>
                     login:{" "}
