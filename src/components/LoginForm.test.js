@@ -68,7 +68,7 @@ describe("LoginForm tests", () => {
         userEvent.click(submitButton);
         expect(mockSubmit).toHaveBeenCalled();
     });*/
-    test("check if submit event will throw error if data is incorrect", () => {
+    test("check if submit button submits the form on click when data is correct", () => {
         const authMock = jest.fn();
         authMock.mockReturnValue(true);
 
