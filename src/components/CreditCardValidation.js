@@ -1,14 +1,12 @@
 export const create16digitsCardNum = (num) => {
     let cardNum = num;
-    if (cardNum.length < 13) {
-        console.log("card number needs to have at least 13 digits");
-        return;
-    }
-    if (cardNum.length >= 13 && cardNum.length < 16) {
-        cardNum = cardNum.padStart(16, "0");
+    if (cardNum.length >= 13 && cardNum.length <= 16) {
+        /*cardNum = cardNum.padStart(16, "0");*/
+        console.log(cardNum);
         return cardNum;
+    } else {
+        return undefined;
     }
-    return cardNum;
 };
 
 export const luhnAlg = (num) => {
@@ -27,10 +25,10 @@ export const luhnAlg = (num) => {
 };
 
 export const checkCardType = (cardNum) => {
-    let visa = new RegExp("^4[0-9]{12}(?:[0-9]{3})?$");
+    let visa = /^4[0-9]{12}(?:[0-9]{3})?$/;
     let mastercard = /^5[1-5][0-9]{14}$/;
-    let amex = /^3[47][0-9]{13}$/;
     let mastercard2 = /^2[2-7][0-9]{14}$/;
+    let amex = /^3[47][0-9]{13}$/;
     let diners = /^3[0689][0-9]{12}[0-9]*$/;
     let jcb = /^35[0-9]{14}[0-9]*$/;
 

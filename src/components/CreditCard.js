@@ -14,20 +14,21 @@ const CreditCard = () => {
         if (cardNum !== undefined) {
             const output = luhnAlg(cardNum) % 10;
             const cardType = checkCardType(cardNum);
+            console.log(output);
             if (output === 0) {
                 setMsg(`Credit card is valid and it is ${cardType}`);
             } else {
                 setMsg("Credit card is invalid");
             }
         } else {
-            setMsg("Please enter at least 13 digits card number");
+            setMsg("Please enter 13 to 16 digits card number");
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setCard("");
         validate(card);
+        setCard("");
     };
 
     const handleChange = (e) => {
@@ -49,7 +50,7 @@ const CreditCard = () => {
                 </label>
             </p>
             <p>
-                <button>Check</button>
+                <button>check</button>
             </p>
         </form>
     );
