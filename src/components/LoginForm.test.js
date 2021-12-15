@@ -1,4 +1,5 @@
 import LoginForm from "./LoginForm";
+import CatchError from "./CatchError";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -46,28 +47,6 @@ describe("LoginForm tests", () => {
             screen.getByText(/The field is too short!/i)
         ).toBeInTheDocument();
     });
-
-    /*test("check if submit button submits the form on click when data is correct", () => {
-        const authMock = jest.fn();
-        authMock.mockReturnValue(true);
-
-        render(<LoginForm tryAuth={authMock} />);
-
-        const loginInput = screen.getByLabelText("login:");
-        userEvent.type(loginInput, "adamkowalski");
-        const passwordInput = screen.getByLabelText("pasword:");
-        userEvent.type(passwordInput, "12345");
-
-        const form = screen.getByTestId("form");
-        const mockSubmit = jest.fn();
-        mockSubmit.mockReturnValue(true);
-
-        render(<form handleSubmit={mockSubmit}></form>);
-
-        const submitButton = screen.getByRole("button", { name: /send/i });
-        userEvent.click(submitButton);
-        expect(mockSubmit).toHaveBeenCalled();
-    });*/
     test("check if submit button submits the form on click when data is correct", () => {
         const authMock = jest.fn();
         authMock.mockReturnValue(true);
@@ -89,7 +68,11 @@ describe("LoginForm tests", () => {
         const authMock = jest.fn();
         authMock.mockReturnValue(false);
 
-        render(<LoginForm tryAuth={authMock} />);
+        render(
+            <CatchError>
+                <LoginForm tryAuth={authMock} />
+            </CatchError>
+        );
 
         const loginInput = screen.getByLabelText("login:");
         userEvent.type(loginInput, "adamkowalski");
@@ -97,7 +80,8 @@ describe("LoginForm tests", () => {
         userEvent.type(passwordInput, "12345");
 
         const submitButton = screen.getByRole("button", { name: /send/i });
+        userEvent.click(submitButton);
 
-        expect(() => userEvent.click(submitButton)).toThrow("Incorrect data!");
+        expect(screen.getByText("Show me this error!")).toBeInTheDocument();
     });
 });

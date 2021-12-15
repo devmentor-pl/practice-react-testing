@@ -59,11 +59,12 @@ describe("Md5Form", () => {
         const button = screen.getByRole("button", { name: /send/i });
         userEvent.click(button);
 
-        waitFor(() => expect(span.textContent).toBe(resolvedPromise));
+        waitFor(
+            async () => await expect(span.textContent).toBe(resolvedPromise)
+        );
     });
     it("check if change of input data clears what is displayed in element with className data-md5", async () => {
         jest.spyOn(window, "fetch");
-        const { container } = render(<Md5Form getMd5={getMd5} />);
 
         const resolvedPromise = "bulbul";
 
@@ -74,6 +75,8 @@ describe("Md5Form", () => {
             },
         });
 
+        const { container } = render(<Md5Form getMd5={getMd5} />);
+
         const input = screen.getByLabelText("");
         userEvent.type(input, "kowalski");
 
@@ -83,6 +86,6 @@ describe("Md5Form", () => {
         userEvent.click(button);
         userEvent.type(input, "makarena");
 
-        waitFor(() => expect(span.textContent).toBe(""));
+        waitFor(async () => await expect(span.textContent).toBe(""));
     });
 });

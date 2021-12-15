@@ -113,11 +113,10 @@ describe("Credit Card test", () => {
         ).toBeInTheDocument();
     });
     it("check if 13 digit visa card will be recognised", () => {
-        // test nie przechodzi nie wiem czy ze wzgledu niepoprawnego numeru czy algorytmu dla card z 13 cyframi
         render(<CreditCard />);
 
         const ccInput = screen.getByLabelText("Credit card number:");
-        userEvent.type(ccInput, "4567199365122");
+        userEvent.type(ccInput, "4012888818888");
         const cardType = "Visa";
         const checkButton = screen.getByRole("button", { name: /check/i });
         userEvent.click(checkButton);
