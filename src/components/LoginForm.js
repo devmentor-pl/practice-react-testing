@@ -23,14 +23,17 @@ function LoginForm(props) {
     function handleChange(e) {
         const {name: field, value} = e.target;
         if(typeof user[field] !== 'undefined') {
-            checkValue(value);
-            setUser({...user, [field]: {value, error: ''} });
+            try {
+                checkValue(value);
+                setUser({...user, [field]: {value, error: ''} });                
+            }  catch (err) {
+                setUser({...user, [field]: {value, error: err.message} });  
+            }
+
         }
     }
-
-    function throwError() {
-        throw new Error('Incorrect data!');
-    }
+    
+    const [hasError, setError] = useState(false);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -39,12 +42,17 @@ function LoginForm(props) {
         const {login, password} = e.target.elements;
 
         const authResp = tryAuth(login.value, password.value);
-        if(typeof authResp.then === 'function') { // if return Promise
-            authResp.catch(() => throwError() );
-        } else if(!authResp) {
-            throwError()
+        if (typeof authResp.then === 'function') { // if return Promise
+            authResp.catch(() => setError(true) );
+        } else if (!authResp) {
+            setError(true)
         }
     }
+
+    if (hasError) {
+        throw new Error('Incorrect data!');
+    }
+
 
     const {login, password} = user;
     return (
