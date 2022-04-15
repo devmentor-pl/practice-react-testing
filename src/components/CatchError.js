@@ -18,7 +18,6 @@ class CatchError extends React.Component {
             } </h1>
         }
         return this.props.children;
-        // return null;
     }
 }
 

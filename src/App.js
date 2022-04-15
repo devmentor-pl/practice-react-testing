@@ -6,7 +6,7 @@ import Task05 from './Task05';
 
 function App() {
 
-    function tryAuth(login, password) {
+   function tryAuth(login, password) {
         return login.length + password.length >= 6;
     }
 
