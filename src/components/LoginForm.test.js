@@ -3,8 +3,6 @@ import userEvent from '@testing-library/user-event';
 
 import LoginForm from './LoginForm.js';
 
-jest.spyOn(window, 'fetch');
-
 describe('LoginForm', () => {
     test('check if login field exist', ()=>{
         render(<LoginForm/>) 
