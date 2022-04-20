@@ -8,9 +8,9 @@ jest.spyOn(window, 'fetch');
 describe('Auth', ()=>{
     test('check if the success info is displayed when pass proper data', async ()=>{
         render(<Auth />)
-
+        const userLogin = 'jan@domena.pl';
         const login = screen.getByLabelText(/login:/i);
-        userEvent.type(login, 'jan@domena.pl');
+        userEvent.type(login, userLogin);
 
         const password = screen.getByLabelText(/password:/i);
         userEvent.type(password, 'janeczek')
@@ -27,7 +27,7 @@ describe('Auth', ()=>{
             const button = screen.getByRole('button', {name: 'send'} );
             userEvent.click(button);
         })
-        const info = screen.getByText(/Jesteś zalogowany jako: jan@domena.pl/);
+        const info = screen.getByText(`Jesteś zalogowany jako: ${userLogin}`);
         expect(info).toBeInTheDocument();
     });
 

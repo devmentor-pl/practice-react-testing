@@ -1,7 +1,8 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import LoginForm from './LoginForm.js';
+import CatchError from './CatchError';
 
 describe('LoginForm', () => {
     test('check if login field exist', ()=>{
@@ -61,23 +62,20 @@ describe('LoginForm', () => {
             const button = screen.getByRole('button', {name: /send/i});
             userEvent.click(button); 
         }).toThrow('Incorrect data!');
-
-        // expect(mockFn).toBeCalledWith('mk', '123'); 
     });
-
-//  ostatni test raz przechodzi raz nie ... - zastanawiam się czy faktycznie jest koniecznośc odwoływania sie do login i password jak sprawdzić chce działanie submit przy pustych polach
 
     test('should throw an error when login and password have not appropriate length no.2', async () =>{
         const mockFn = jest.fn();
         mockFn.mockReturnValue(false);
         
-        render(<LoginForm tryAuth={mockFn}/>);
+        render(<CatchError><LoginForm tryAuth={mockFn}/></CatchError>);
         
-        expect(()=> {
+        await waitFor(()=> {
             const button = screen.getByRole('button', {name: /send/i});
             userEvent.click(button); 
-        }).toThrow('Incorrect data!');
+        });
 
-        expect(mockFn).toBeCalledWith("", "");
+        const info = screen.getByText('Incorrect data!');
+        expect(info).toBeInTheDocument();
     })
 })
