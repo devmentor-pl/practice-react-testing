@@ -13,6 +13,7 @@ function LoginForm(props) {
     }
 
     const [user, setUser] = useState(userDefault);
+    const [error, setError] = useState(false)
 
     function checkValue(value) {
         if(value.length <= 3)  {
@@ -23,14 +24,19 @@ function LoginForm(props) {
     function handleChange(e) {
         const {name: field, value} = e.target;
         if(typeof user[field] !== 'undefined') {
-            checkValue(value);
-            setUser({...user, [field]: {value, error: ''} });
+            try {
+                checkValue(value);
+                setUser({...user, [field]: {value, error: ''} });
+            } catch (err) {
+                console.log(err)
+                setUser({...user, [field]: {error: err.message} });
+            }
         }
     }
 
-    function throwError() {
-        throw new Error('Incorrect data!');
-    }
+    // function throwError() {
+    //     throw new Error('Incorrect data!');
+    // }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -40,10 +46,17 @@ function LoginForm(props) {
 
         const authResp = tryAuth(login.value, password.value);
         if(typeof authResp.then === 'function') { // if return Promise
-            authResp.catch(() => throwError() );
+            authResp.catch(() => setError(true) );
         } else if(!authResp) {
-            throwError()
+            // throwError()
+            setError(true)
+        } else {
+            console.log('Poprawne dane')
         }
+    }
+
+    if(error) {
+        throw Error('Error apeared')
     }
 
     const {login, password} = user;
