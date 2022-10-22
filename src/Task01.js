@@ -1,6 +1,6 @@
-import React from 'react';
-import LoginForm from './components/LoginForm';
-import CatchError from './components/CatchError';
+import React from 'react'
+import LoginForm from './components/LoginForm'
+import CatchError from './components/CatchError'
 
 const Task01 = () => {
     function tryAuth(login, password) {
@@ -14,7 +14,7 @@ const Task01 = () => {
                 <LoginForm tryAuth={tryAuth} />
             </CatchError>
         </section>
-    );
-};
+    )
+}
 
 export default Task01;

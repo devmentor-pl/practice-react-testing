@@ -28,7 +28,7 @@ function LoginForm(props) {
                 checkValue(value);
                 setUser({...user, [field]: {value, error: ''} });
             } catch (err) {
-                console.log(err)
+                // console.log(err)
                 setUser({...user, [field]: {error: err.message} });
             }
         }
@@ -51,7 +51,7 @@ function LoginForm(props) {
             // throwError()
             setError(true)
         } else {
-            console.log('Poprawne dane')
+            // console.log('Poprawne dane')
         }
     }
 
