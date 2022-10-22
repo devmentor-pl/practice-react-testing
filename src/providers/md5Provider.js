@@ -7,8 +7,10 @@ export function getMd5(string) {
             if(resp.ok) {
                 return resp.json();
             }
-
             return Promise.reject(resp);
         })
-        .then(data => data.Digest);
+        .then(data => {
+            // console.log(data)
+            return data.Digest
+        });
 }

@@ -1,7 +1,7 @@
 import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import LoginForm from './LoginForm'
-import CatchError from './../components/CatchError'
+import CatchError from './CatchError'
 
 describe('Test', () => {
     test('must be true', () => {
@@ -67,8 +67,8 @@ describe('checking that all elements in the component', () => {
 
         userEvent.click(button)
 
-        const alert = await screen.findByText(/Somethin wrong, error: Error apeared/i)
-        expect(alert).toBeInTheDocument()
+        const errorText = await screen.findByText(/Somethin wrong, error: Error apeared/i)
+        expect(errorText).toBeInTheDocument()
     })  
 
     test('should Error when send wrong data - getByRole & waitFor', async () => {
@@ -88,8 +88,8 @@ describe('checking that all elements in the component', () => {
             userEvent.click(button)
         })
 
-        const alert = await screen.findByText(/Somethin wrong, error: Error apeared/i)
-        expect(alert).toBeInTheDocument()
+        const errorText = await screen.findByText(/Somethin wrong, error: Error apeared/i)
+        expect(errorText).toBeInTheDocument()
     })    
 })
 
