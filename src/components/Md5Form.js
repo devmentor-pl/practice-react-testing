@@ -20,7 +20,9 @@ const Md5Form = ({getMd5}) => {
             <form onSubmit={handleSubmit}>
                 <p>
                     <label>
-                        <input value={text} onChange={handleChange} />
+                        <input value={text} name='login' 
+                            onChange={handleChange} 
+                        />
                     </label>
                 </p>
                 <p><button>send</button></p>

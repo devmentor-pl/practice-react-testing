@@ -51,7 +51,7 @@ function LoginForm(props) {
             // throwError()
             setError(true)
         } else {
-            // console.log('Poprawne dane')
+            console.log('Poprawne dane')
         }
     }
 
@@ -60,17 +60,22 @@ function LoginForm(props) {
     }
 
     const {login, password} = user;
+    // console.log(login)
     return (
         <form onSubmit={ handleSubmit }>
             <p>
                 <label>
-                    login: <input name="login" value={ login.value } onChange={e => handleChange(e)} />
+                    login: <input name="login" value={ login.value } 
+                        onChange={e => handleChange(e)} 
+                    />
                     { login.error && <strong>{ login.error }</strong> }
                 </label>
             </p>
             <p>
                 <label>
-                    password: <input name="password" value={ password.value } onChange={e => handleChange(e)} />
+                    password: <input name="password" value={ password.value } 
+                        onChange={e => handleChange(e)} 
+                    />
                     { password.error && <strong>{ password.error }</strong> }
                 </label>
             </p>

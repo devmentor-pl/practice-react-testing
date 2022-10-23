@@ -10,7 +10,7 @@ export function getMd5(string) {
             return Promise.reject(resp);
         })
         .then(data => {
-            // console.log(data)
+            // console.log(data.Digest)
             return data.Digest
         });
 }
