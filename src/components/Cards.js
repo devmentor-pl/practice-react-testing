@@ -96,14 +96,13 @@ const Cards = () => {
         <div>
             <div>recognize cards: Visa, MasterCard, American Express, Biner Club</div>
             <hr />
-            <div>Examples of credit card numbers</div>
-            <div>5575373225509616 - MasterCard OK AS green</div>
-            <div>55753732255102 - MasterCard NO AS green</div>
-            <div>4874742029558527 - VISA AS blue</div>
-            <div>4140719398084341 - AS teal </div>
+            {/* <div>Examples of credit card numbers</div>
+            <div>5575373225509616 - MasterCard OK </div>
+            <div>4874742029558527 - VISA OK</div>
+            <div>4140719398084341 - VISA OK</div>
             <div>4213523283653018 - VISA 16 digs OK</div>
-            <div>4213523283653 - VISA 13 digs OK  </div>
-            <div>42135232836530 - VISA 14 digs NO </div>
+            <div>4213523283653    - VISA 13 digs OK  </div>
+            <div>42135232836530   - VISA 14 digs NO </div> */}
             <form onSubmit={onSubmit}>
                 <label>number cars</label>
                 <input type="number" onChange={onInput}
