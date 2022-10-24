@@ -1,4 +1,4 @@
-import {fireEvent, render, screen, waitFor} from '@testing-library/react'
+import {findByText, fireEvent, getByTestId, getByText, render, screen, waitFor} from '@testing-library/react'
 import  userEvent  from '@testing-library/user-event'
 import {getMd5} from './md5Provider'
 import Md5Form from './../components/Md5Form'
@@ -141,6 +141,85 @@ describe('test fetch by spyOn', () => {
         }) 
         
         expect(element.textContent).toBe(result)
+    })
+
+    // repeated #03
+    it('sholud check it text apear in data-text class 1', () => {
+        const {container} = render(<Md5Form />)
+        const input = container.querySelector('input')
+        fireEvent.change(input, {target: {value: 'Test'}})
+        expect(input.value).toBe('Test')
+    })
+    it('sholud check it test apear in data-text class 2', () => {
+        const {container} = render(<Md5Form />)
+        const input = container.querySelector('input')
+        fireEvent.change(input, {target: {value: 'Test'}})
+        const dataText = container.querySelector('.data-text')
+        expect(dataText.textContent).toBe('Test')
+    })
+
+    it('sholud check submit data sent to .data-md5 1 fireEvent', async () => {
+        const {container, getByText} = render(<Md5Form getMd5={getMd5}/>)
+        const input = container.querySelector('input')
+        fireEvent.change(input, {target: {value: 'Test'}})
+        const result = '098f6bcd4621d373cade4e832627b4f6'
+        const button = getByText('send')
+
+        window.fetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => {
+                return {Digest: result}
+            }
+        })
+        await waitFor(() => {
+            fireEvent.click(button)
+        }) 
+        const dataMd5 = container.querySelector('.data-md5')
+        expect(dataMd5.textContent).toBe(result)
+    })
+
+    it('sholud check submit data sent to .data-md5 2 userEvent & findByText', async () => {
+        const {container, getByText} = render(<Md5Form getMd5={getMd5}/>)
+        const input = container.querySelector('input')
+        fireEvent.change(input, {target: {value: 'Test'}})
+        const result = '098f6bcd4621d373cade4e832627b4f6'
+        const button = getByText('send')
+
+        window.fetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => {
+                return {Digest: result}
+            }
+        })
+        await waitFor(() => {
+            userEvent.type(button)
+        }) 
+        const dataMd5 = await screen.findByText(result)
+        expect(dataMd5.textContent).toBe(result)
+    })
+
+    it('sholud clear element .data-md5 after change data in input element', async () => {
+        const {container, getByText} = render(<Md5Form getMd5={getMd5}/>)
+
+        let dataMd5 = container.querySelector('.data-md5')
+        const input = container.querySelector('input')
+
+        const result = '098f6bcd4621d373cade4e832627b4f6'
+        const button = getByText('send')
+
+        window.fetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => {
+                return {Digest: result}
+            }
+        })
+        await waitFor(() => {
+            userEvent.type(button)
+        }) 
+        fireEvent.change(input, {target: {value: 'input change'}})
+        // screen.debug()
+        expect(input.value).toBe('input change')
+        expect(dataMd5.textContent).toBe('')
     })
 });
 

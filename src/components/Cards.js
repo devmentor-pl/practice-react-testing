@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 
 const Cards = () => {
-    const [number, setNumber] = useState()
-    const [correctNumber, setCorrectNumber] = useState()
-    const [kindCard, setKindCard] = useState()
+    const [number, setNumber] = useState('')
+    const [correctNumber, setCorrectNumber] = useState(false)
+    const [kindCard, setKindCard] = useState('')
+    const [enter, setEnter] = useState(false)
 
     function checkValue(val) {
         return val.length <= 16 ? true : false
@@ -15,6 +16,7 @@ const Cards = () => {
         } else {
             console.log('Error')
         }
+        setEnter(false)
     }
     const convertNumToArr = number => {
         console.log(number)
@@ -29,30 +31,30 @@ const Cards = () => {
         console.log('length', number.length)
         if (number[0] === 4 && (number.length === 16 || number.length === 13)) {
             setKindCard('VISA')
-        } else if(
+        } else if (
             number[0] === 5 && number.length === 16 && (
-                number[1] === 1 || 
-                number[1] === 2 || 
-                number[1] === 3 || 
+                number[1] === 1 ||
+                number[1] === 2 ||
+                number[1] === 3 ||
                 number[1] === 4 ||
                 number[1] === 5
             )
-            ) {
+        ) {
             setKindCard('MasterCard')
-        } else if(
+        } else if (
             number[0] === 3 && number.length === 15 && (
-                number[1] === 4 || 
+                number[1] === 4 ||
                 number[1] === 7
             )
-            ) {
+        ) {
             setKindCard('American Express')
-        } else if(
+        } else if (
             number[0] === 3 && number.length === 14 && (
-                number[1] === 0 || 
+                number[1] === 0 ||
                 number[1] === 6 ||
                 number[1] === 8
             )
-            ) {
+        ) {
             setKindCard('Diners Club')
         } else {
             setCorrectNumber(false)
@@ -61,6 +63,7 @@ const Cards = () => {
 
     const onSubmit = e => {
         e.preventDefault()
+        setEnter(true)
         const numberArr = convertNumToArr(number)
         console.log(numberArr)
         let numbersOneString = ''
@@ -81,7 +84,7 @@ const Cards = () => {
         const sumTwoRow = sumOfArr(numberTwoArr)
 
         const sum = sumOneRow + sumTwoRow
-        console.log('sum',sum)
+        console.log('sum', sum)
 
         if (sum % 10 === 0) {
             setCorrectNumber(true)
@@ -114,9 +117,12 @@ const Cards = () => {
                 Numer karty: <b>{number}</b>
             </div>
             <div>
-                { correctNumber 
-                    ? <span style={{color: 'green'}}>Rodzaj karty: <b>{kindCard}</b></span> 
-                    : <span style={{color: 'red'}}>Niepoprawna karta</span>
+                {enter
+                    ?
+                    correctNumber
+                        ? <span style={{ color: 'green' }}>Rodzaj karty: <b>{kindCard}</b></span>
+                        : <span style={{ color: 'red' }}>Niepoprawna karta</span>
+                    : null
                 }
             </div>
         </div>
