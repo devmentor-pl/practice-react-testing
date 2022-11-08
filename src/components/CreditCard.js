@@ -9,9 +9,11 @@ export const CreditCard = () => {
     const checkCardNumberLength = (number) => {
         return number.length <= 16 ? true : false
     }
+
     const changeToArray = () => {
         return String(cardNumber).split('').map(number => Number(number))
     }
+    
     const onInputChange = (e) => {
         checkCardNumberLength(e.target.value)
         ? 
@@ -74,15 +76,15 @@ export const CreditCard = () => {
                 || numbers[1] === 4
                 || numbers[1] === 5)){
             setCardProducer('MasterCard')
-        } else {
-            setCardProducer('Wrong card number!')
+        } else{
+            setCardProducer('No matching producer!')
         }
     }
 
     return (
         <>
         <form onSubmit={handleSubmit}>
-             <label htmlFor={'cardNumber'}>Numer karty: </label>
+            <label htmlFor={'cardNumber'}>Numer karty: </label>
             <input value={cardNumber} onChange={onInputChange} type={'number'}></input>
             <button>OK</button> 
         </form>
