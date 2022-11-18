@@ -1,4 +1,4 @@
-import LoginForm from "./LoginForm";
+import LoginForm from "../components/LoginForm";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CatchError from "../CatchError";
