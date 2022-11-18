@@ -16,7 +16,7 @@ function LoginForm(props) {
     const [hasError, setHasError] = useState(false)
 
     if (hasError) {
-        throw Error('Incorrect data!');
+        throwError();
     }
 
     function checkValue(value) {
@@ -36,6 +36,10 @@ function LoginForm(props) {
             }
             
         }
+    }
+
+    function throwError() {
+        throw new Error('Incorrect data!');
     }
 
     function handleSubmit(e) {
