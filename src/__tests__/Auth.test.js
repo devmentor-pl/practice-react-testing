@@ -1,5 +1,5 @@
 import Auth from '../components/Auth';
-import { act, render, screen } from "@testing-library/react";
+import {  render, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
 import userEvent from "@testing-library/user-event";
 
