@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import LoginForm from './LoginForm';
 import Catcher from './Cacher';
 
-describe('<LoginForm>', () => {
+xdescribe('<LoginForm>', () => {
     test('login input - long value', async () => {
         render(<LoginForm />);
 
