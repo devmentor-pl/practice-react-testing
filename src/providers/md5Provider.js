@@ -4,11 +4,13 @@ export function getMd5(string) {
         body: string,
     })
         .then(resp => {
-            if(resp.ok) {
+            if (resp.ok) {
                 return resp.json();
             }
 
             return Promise.reject(resp);
         })
-        .then(data => data.Digest);
+        .then(data => {
+            return data.Digest
+        });
 }
