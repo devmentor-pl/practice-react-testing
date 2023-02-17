@@ -2,29 +2,36 @@ import React, { useState } from 'react';
 import users from './../db/users';
 import {getMd5} from './../providers/md5Provider';
 import LoginForm from './LoginForm';
+import CatchError from "./CatchError";
 
 const Auth = () => {
-    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
-    async function findUser(login, password) {
-        const md5 = await getMd5(password);
+  async function findUser(login, password) {
+    const md5 = await getMd5(password);
 
-        console.log(md5, login);
+    console.log(md5, login);
 
-        const userFromDB = users.find(u => u.login === login && u.password === md5);
-        if(userFromDB) {
-            setUser(userFromDB);
-            return userFromDB;
-        }
-
-        return null;
+    const userFromDB = users.find(
+      (u) => u.login === login && u.password === md5
+    );
+    if (userFromDB) {
+      setUser(userFromDB);
+      return userFromDB;
     }
 
-    if(user) {
-        return <h1>Jesteś zalogowany jako: {user.login}</h1>
-    }
+    return null;
+  }
 
-    return <LoginForm tryAuth={findUser} />
+  if (user) {
+    return <h1>Jesteś zalogowany jako: {user.login}</h1>;
+  }
+
+  return (
+    <CatchError>
+      <LoginForm tryAuth={findUser} />
+    </CatchError>
+  );
 };
 
 export default Auth;
