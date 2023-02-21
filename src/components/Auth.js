@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import users from './../db/users';
 import {getMd5} from './../providers/md5Provider';
-import LoginForm from './LoginForm';
-import CatchError from "./CatchError";
+import LoginForm from "./LoginForm";
 
 const Auth = () => {
   const [user, setUser] = useState(null);
@@ -27,11 +26,7 @@ const Auth = () => {
     return <h1>Jesteś zalogowany jako: {user.login}</h1>;
   }
 
-  return (
-    <CatchError>
-      <LoginForm tryAuth={findUser} />
-    </CatchError>
-  );
+  return <LoginForm tryAuth={findUser} />;
 };
 
 export default Auth;
