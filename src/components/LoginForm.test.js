@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LoginForm from "./LoginForm";
 import CatchError from "./CatchError";
@@ -36,8 +36,23 @@ describe("<LoginForm>", () => {
     const error = screen.queryByText("The field is too short!");
     expect(error).toBeInTheDocument();
   });
-});
+  it("send button", async () => {
+    render(<LoginForm />);
+    const sendButton = await screen.findByRole("button", {
+      name: "send",
+    });
+    expect(sendButton).toBeInTheDocument();
+  });
+  it("button send - bad values", async () => {
+    const mock = jest.fn;
+    mock.mockReturnValueOnce(false);
+    render(<LoginForm tryAuth={mock} />);
 
-/*const mock = jest.fn;
-mock.mockReturnValueOnce(true);
-describe("<LoginForm tryAuth={mock}>", () => {});*/
+    const sendButton = await screen.findByRole("button", {
+      name: "send",
+    });
+    fireEvent.click(sendButton);
+    const error = await screen.findByText("Something went wrong");
+    expect(error).toBeInTheDocument();
+  });
+});
