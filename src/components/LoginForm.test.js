@@ -44,9 +44,13 @@ describe("<LoginForm>", () => {
     expect(sendButton).toBeInTheDocument();
   });
   it("button send - bad values", async () => {
-    const mock = jest.fn;
+    const mock = jest.fn();
     mock.mockReturnValueOnce(false);
-    render(<LoginForm tryAuth={mock} />);
+    render(
+      <CatchError>
+        <LoginForm tryAuth={mock} />
+      </CatchError>
+    );
 
     const sendButton = await screen.findByRole("button", {
       name: "send",
