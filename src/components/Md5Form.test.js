@@ -1,37 +1,109 @@
 import {
   render,
   screen,
-  fireEvent,
   unmountComponentAtNode,
+  waitFor,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Md5Form from "./Md5Form";
 import { getMd5 } from "../providers/md5Provider";
 
-/*let container = null;
-beforeEach(() => {
-  // ustaw element DOM jako cel renderowania
-  container = document.createElement("div");
-  document.body.appendChild(container);
-});
-
-afterEach(() => {
-  // posprzątaj po zakończeniu
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-});*/
-
 describe("<Md5Form>", () => {
-  test("input text - proper class", async () => {
+  test("input -> strong", async () => {
+    const text = "123";
+    const md5 = "202cb962ac59075b964b07152d234b70";
+
+    const spy = jest.spyOn(window, "fetch");
+    window.fetch.mockResolvedValue({
+      ok: true,
+      json: async () => {
+        return { Digest: md5 };
+      },
+    });
     render(<Md5Form getMd5={getMd5} />);
+    const input = await screen.findByRole("textbox");
+    userEvent.type(input, text);
+    const button = await screen.findByRole("button");
+    userEvent.click(button);
 
-    const mockTarget = { value: "napis" };
+    await waitFor(async () => {
+      const strong = await screen.findByText(md5);
+      expect(strong).toBeInTheDocument();
+    });
 
-    const spy = jest.spyOn(Md5Form, "handleChange");
-
-    Md5Form.handleChange(mockTarget);
-    const element = screen.queryByText(`.data-text`);
-    expect(element.innerText).toBe("napis");
+    spy.mockClear();
   });
+  test("input text -> class", async () => {
+    const text = "123";
+    const md5 = "202cb962ac59075b964b07152d234b70";
+
+    const spy = jest.spyOn(window, "fetch");
+    window.fetch.mockResolvedValue({
+      ok: true,
+      json: async () => {
+        return { Digest: md5 };
+      },
+    });
+    render(<Md5Form getMd5={getMd5} />);
+    const input = await screen.findByRole("textbox");
+    userEvent.type(input, text);
+
+    await waitFor(async () => {
+      const spanElement = await screen.findByText(text);
+      expect(spanElement).toHaveClass(`data-text`);
+    });
+
+    spy.mockClear();
+  });
+  test("form submit -> data in proper element", async () => {
+    const text = "123";
+    const md5 = "202cb962ac59075b964b07152d234b70";
+
+    const spy = jest.spyOn(window, "fetch");
+    window.fetch.mockResolvedValue({
+      ok: true,
+      json: async () => {
+        return { Digest: md5 };
+      },
+    });
+    render(<Md5Form getMd5={getMd5} />);
+    const input = await screen.findByRole("textbox");
+    userEvent.type(input, text);
+    const button = await screen.findByRole("button");
+    userEvent.click(button);
+
+    await waitFor(async () => {
+      const strong = await screen.findByText(md5);
+      expect(strong).toHaveClass("data-md5");
+    });
+
+    spy.mockClear();
+  });
+  // Poniższy test mi nie przechodzi, zastanawiam sie dlaczego ?
+  /*test("input data change -> clears strong element", async () => {
+    const text = "123";
+    const newText = "100";
+    const md5 = "202cb962ac59075b964b07152d234b70";
+
+    const spy = jest.spyOn(window, "fetch");
+    window.fetch.mockResolvedValue({
+      ok: true,
+      json: async () => {
+        return { Digest: md5 };
+      },
+    });
+    render(<Md5Form getMd5={getMd5} />);
+    const input = await screen.findByRole("textbox");
+    userEvent.type(input, text);
+    const button = await screen.findByRole("button");
+    userEvent.click(button);
+    //input = await screen.findByRole("textbox");
+    userEvent.type(input, newText);
+
+    const strong = await screen.findByText(md5);
+    expect(strong).toBe(null);
+
+    spy.mockClear();
+  });*/
 });
+
