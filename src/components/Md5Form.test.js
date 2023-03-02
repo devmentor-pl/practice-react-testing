@@ -1,9 +1,4 @@
-import {
-  render,
-  screen,
-  unmountComponentAtNode,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Md5Form from "./Md5Form";
 import { getMd5 } from "../providers/md5Provider";
@@ -79,8 +74,8 @@ describe("<Md5Form>", () => {
 
     spy.mockClear();
   });
-  // Poniższy test mi nie przechodzi, zastanawiam sie dlaczego ?
-  /*test("input data change -> clears strong element", async () => {
+
+  test("input data change -> clears strong element", async () => {
     const text = "123";
     const newText = "100";
     const md5 = "202cb962ac59075b964b07152d234b70";
@@ -98,12 +93,20 @@ describe("<Md5Form>", () => {
     const button = await screen.findByRole("button");
     userEvent.click(button);
     //input = await screen.findByRole("textbox");
+
+    await waitFor(async () => {
+      const strong = await screen.findByText(md5);
+      expect(strong).toBeInTheDocument();
+    });
+
     userEvent.type(input, newText);
 
-    const strong = await screen.findByText(md5);
-    expect(strong).toBe(null);
+    await waitFor(async () => {
+      const strong = screen.queryByText("data-md5");
+      expect(strong).not.toBeInTheDocument();
+    });
 
     spy.mockClear();
-  });*/
+  });
 });
 
