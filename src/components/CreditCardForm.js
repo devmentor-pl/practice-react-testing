@@ -25,7 +25,6 @@ function CreditCardForm(props) {
       let newNum = value.padStart(16, "0");
       let sum = 0;
       let newSum = 0;
-      console.log(newNum);
       for (let i = 0; i < newNum.length; i++) {
         if (i === 0) {
           sum = (parseInt(newNum[i]) * 2).toString();
@@ -39,7 +38,6 @@ function CreditCardForm(props) {
         newSum = newSum + parseInt(sum[j]);
       }
       let newSumStr = newSum.toString();
-      console.log(newSumStr.charAt(newSumStr.length - 1));
       if (newSumStr.charAt(newSumStr.length - 1) !== "0") {
         throw new Error("Wrong card number!");
       } else {

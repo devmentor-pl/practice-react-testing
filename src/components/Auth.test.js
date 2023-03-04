@@ -1,8 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Auth from "./Auth";
-//import Md5Form from "./Md5Form";
-//import { getMd5 } from "../providers/md5Provider";
 
 describe("<Auth>", () => {
   test("input -> user1", async () => {

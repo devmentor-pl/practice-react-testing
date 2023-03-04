@@ -97,6 +97,8 @@ describe("<CreditCardForm>", () => {
       expect(message).toBeInTheDocument();
     });
   });
+
+  // poniższy test nie przechodzi, ale pojawia się informacja, że coś jest nie tak w <LoginForm> component i nie za bardzo rozumiem, jaki to ma tutaj związek?
   /*it("cardNumber input - check number(correct)", async () => {
     render(<CreditCardForm />);
     const fieldCardNumber = await screen.findByRole("textbox", {

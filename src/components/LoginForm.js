@@ -25,21 +25,15 @@ function LoginForm(props) {
   function handleChange(e) {
     const { name: field, value } = e.target;
     let error = "";
-    console.log(e.target);
     if (typeof user[field] !== "undefined") {
       try {
         checkValue(value);
       } catch (err) {
-        console.log(err.message);
         error = err.message;
       }
       setUser({ ...user, [field]: { value, error } });
     }
   }
-
-  /*function throwError() {
-    //throw new Error("Incorrect data!");
-  }*/
 
   function handleSubmit(e) {
     e.preventDefault();
