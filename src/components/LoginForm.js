@@ -15,6 +15,7 @@ function LoginForm(props) {
   const [user, setUser] = useState(userDefault);
   const [err, setErr] = useState("");
 
+
   function checkValue(value) {
     if (value.length <= 3) {
       throw new Error("The field is too short!");

@@ -79,8 +79,34 @@ describe("<CreditCardForm>", () => {
     userEvent.click(sendButton);
 
     await waitFor(async () => {
-      const message = await screen.findByText("Błędny numer karty!");
+      const message = await screen.findByText(
+        "Card number do not match any type!"
+      );
       expect(message).toBeInTheDocument();
     });
   });
+  it("cardNumber input - check number(wrong)", async () => {
+    render(<CreditCardForm />);
+    const fieldCardNumber = await screen.findByRole("textbox", {
+      name: /cardNumber/i,
+    });
+    userEvent.type(fieldCardNumber, "1111111111111111");
+
+    await waitFor(async () => {
+      const message = await screen.findByText("Wrong card number!");
+      expect(message).toBeInTheDocument();
+    });
+  });
+  /*it("cardNumber input - check number(correct)", async () => {
+    render(<CreditCardForm />);
+    const fieldCardNumber = await screen.findByRole("textbox", {
+      name: /cardNumber/i,
+    });
+    userEvent.type(fieldCardNumber, "4111111111111111");
+
+    await waitFor(async () => {
+      const message = await screen.findByText("Wrong card number!");
+      expect(message).not.toBeInTheDocument();
+    });
+  });*/
 });

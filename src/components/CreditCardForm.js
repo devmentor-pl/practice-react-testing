@@ -4,11 +4,9 @@ function CreditCardForm(props) {
   const userDefault = {
     firstName: {
       value: "",
-      error: "",
     },
     surname: {
       value: "",
-      error: "",
     },
     cardNumber: {
       value: "",
@@ -16,23 +14,55 @@ function CreditCardForm(props) {
     },
     expirationDate: {
       value: "",
-      error: "",
     },
   };
 
   const [user, setUser] = useState(userDefault);
   const [creditCardType, setCreditCardType] = useState("");
-  const [err, setErr] = useState("");
+
+  function checkCardNumber(value) {
+    if (value.length >= 13 && value.length <= 16) {
+      let newNum = value.padStart(16, "0");
+      let sum = 0;
+      let newSum = 0;
+      console.log(newNum);
+      for (let i = 0; i < newNum.length; i++) {
+        if (i === 0) {
+          sum = (parseInt(newNum[i]) * 2).toString();
+        } else if (i % 2 === 0) {
+          sum = sum + (parseInt(newNum[i]) * 2).toString();
+        } else {
+          sum = sum + (parseInt(newNum[i]) * 1).toString();
+        }
+      }
+      for (let j = 0; j < sum.length; j++) {
+        newSum = newSum + parseInt(sum[j]);
+      }
+      let newSumStr = newSum.toString();
+      console.log(newSumStr.charAt(newSumStr.length - 1));
+      if (newSumStr.charAt(newSumStr.length - 1) !== "0") {
+        throw new Error("Wrong card number!");
+      } else {
+        console.log("Correct number!");
+      }
+    }
+  }
 
   function handleChange(e) {
     const { name: field, value } = e.target;
-    setUser({ ...user, [field]: { value } });
+    let error = "";
+    if (typeof user[field] !== "undefined") {
+      try {
+        checkCardNumber(value);
+      } catch (err) {
+        error = err.message;
+      }
+      setUser({ ...user, [field]: { value, error } });
+    }
     setCreditCardType("");
   }
 
   function CreditCardTypeCheck() {
-    console.log(cardNumber.value.charAt(0));
-    console.log(cardNumber.value.length);
     if (cardNumber.value.length === 16 && cardNumber.value.charAt(0) === "5") {
       setCreditCardType("MasterCard");
     } else if (
@@ -46,13 +76,12 @@ function CreditCardForm(props) {
     ) {
       setCreditCardType("Visa");
     } else {
-      setCreditCardType("Błędny numer karty!");
+      setCreditCardType("Card number do not match any type!");
     }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(cardNumber.value);
     CreditCardTypeCheck();
   }
 
@@ -67,7 +96,6 @@ function CreditCardForm(props) {
             value={firstName.value}
             onChange={(e) => handleChange(e)}
           />
-          {firstName.error && <strong>{firstName.error}</strong>}
         </label>
       </p>
       <p>
@@ -78,7 +106,6 @@ function CreditCardForm(props) {
             value={surname.value}
             onChange={(e) => handleChange(e)}
           />
-          {surname.error && <strong>{surname.error}</strong>}
         </label>
       </p>
       <p>
@@ -100,7 +127,6 @@ function CreditCardForm(props) {
             value={expirationDate.value}
             onChange={(e) => handleChange(e)}
           />
-          {expirationDate.error && <strong>{expirationDate.error}</strong>}
         </label>
       </p>
       <p>

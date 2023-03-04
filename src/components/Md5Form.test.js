@@ -92,7 +92,6 @@ describe("<Md5Form>", () => {
     userEvent.type(input, text);
     const button = await screen.findByRole("button");
     userEvent.click(button);
-    //input = await screen.findByRole("textbox");
 
     await waitFor(async () => {
       const strong = await screen.findByText(md5);
