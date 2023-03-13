@@ -28,7 +28,7 @@ function LoginForm(props) {
                 throwError()
             )
         }
-    },[isError])
+    },[isError, errorHandler])
     function handleChange(e) {
         const {name: field, value} = e.target;
         if(typeof user[field] !== 'undefined') {
