@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import {useErrorHandler} from 'react-error-boundary';
 
 function LoginForm(props) {
     const userDefault = {
@@ -9,22 +10,34 @@ function LoginForm(props) {
         password: {
             value: '',
             error: '',
-        }
+        },
+        
     }
-
+    const errorHandler = useErrorHandler();
     const [user, setUser] = useState(userDefault);
+    const [isError, setIsError] = useState(false)
 
     function checkValue(value) {
         if(value.length <= 3)  {
             throw new Error('The field is too short!');
         }
     }
-
+    useEffect(()=> {
+        if(isError === true){
+            errorHandler(
+                throwError()
+            )
+        }
+    },[isError])
     function handleChange(e) {
         const {name: field, value} = e.target;
         if(typeof user[field] !== 'undefined') {
-            checkValue(value);
-            setUser({...user, [field]: {value, error: ''} });
+            try{
+                checkValue(value);
+                setUser({...user, [field]: {value, error: ''}})
+            }catch(err){
+                setUser({...user, [field]: {value, error: err.message} });
+            }
         }
     }
 
@@ -39,10 +52,11 @@ function LoginForm(props) {
         const {login, password} = e.target.elements;
 
         const authResp = tryAuth(login.value, password.value);
-        if(typeof authResp.then === 'function') { // if return Promise
+        if(typeof authResp.then === 'function') { 
+            // if return Promise
             authResp.catch(() => throwError() );
         } else if(!authResp) {
-            throwError()
+            setIsError(true)
         }
     }
 
