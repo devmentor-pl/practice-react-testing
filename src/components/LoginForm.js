@@ -56,7 +56,7 @@ function LoginForm(props) {
             // if return Promise
             authResp.catch(() => throwError() );
         } else if(!authResp) {
-            setIsError(true)
+            setIsError(true);
         }
     }
 
@@ -75,7 +75,7 @@ function LoginForm(props) {
                     { password.error && <strong>{ password.error }</strong> }
                 </label>
             </p>
-            <p><button>send</button></p>
+            <p><button >send</button></p>
         </form>
     );
 }
