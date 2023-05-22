@@ -11,7 +11,7 @@ Gdy dane wpisywane do formularza są zbyt krótkie, tj. gdy ilość znaków jest
 
 Twoim zadaniem jest obsługa tych błędów:
 1. Gdy użytkownik wpisuje dane do formularza (`onChange`), a ilość wprowadzanych znaków jest mniejsza lub równa 3, wyświetlaj odpowiedni komunikat. Użyj `try...catch`.
-2. Jeśli użytkownik wyśle nieprawidłowe dane (`onSubmit`), to zamiast formularza wyświetl element `<h1>` ze stosownym komunikatem. Użyj `.getDerivedStateFromError()`.
+2. Jeśli użytkownik wyśle nieprawidłowe dane (`onSubmit`), to zamiast formularza wyświetl element `<h1>` ze stosownym komunikatem. Użyj `.getDerivedStateFromError()`..
 
 > **Uwaga:** pamiętaj, aby zainstalować wszystkie paczki zapisane w `package.json` przy pomocy `npm i`. Uruchomienie serwera jak zwykle odbywa się przez `npm start`.
 
