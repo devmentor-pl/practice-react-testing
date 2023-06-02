@@ -47,7 +47,7 @@ function LoginForm(props) {
     const { login, password } = e.target.elements;
 
     const authResp = tryAuth(login.value, password.value);
-    if (typeof authResp.then === "function") {
+    if (typeof authResp === "function") {
       // if return Promise
       authResp.catch(() => throwError());
     } else if (!authResp) {
@@ -57,7 +57,7 @@ function LoginForm(props) {
 
   const { login, password } = user;
 
-  if (hasError) {
+  if (hasError && errorMessage) {
     return <h1>{errorMessage}</h1>;
   }
 
