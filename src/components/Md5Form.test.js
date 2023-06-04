@@ -40,7 +40,7 @@ describe("getMd5()", () => {
     });
   });
 
-  test("shoud .data-md5 be cleared when input change", async () => {
+  test("should .data-md5 be cleared when input change", async () => {
     md5ProviderFetchResolvedOnce(window.fetch);
     const { container } = render(<Md5Form getMd5={getMd5} />);
 
