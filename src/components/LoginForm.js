@@ -49,7 +49,7 @@ function LoginForm(props) {
 	}
 
 	if (hasError) {
-		throw new Error("Incorrect data!");
+		throw new Error("Incorrect data");
 	}
 
 	const { login, password } = user;
@@ -59,6 +59,7 @@ function LoginForm(props) {
 				<label>
 					login:{" "}
 					<input
+						type='text'
 						name='login'
 						value={login.value}
 						onChange={e => handleChange(e)}
