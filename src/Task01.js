@@ -8,7 +8,7 @@ const Task01 = () => {
 	}
 
 	return (
-		<CatchError message={"Incorrect data"}>
+		<CatchError>
 			<section>
 				<h1>Task01</h1>
 				<LoginForm tryAuth={tryAuth} />

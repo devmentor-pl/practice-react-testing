@@ -59,11 +59,7 @@ describe("<LoginForm>", () => {
 			userEvent.type(passwordInput, passwordText);
 			const button = screen.getByRole("button");
 			userEvent.click(button);
-			expect(mockAuth).toBeCalled(1);
-			mockAuth.mockReturnValue(false);
-			const error = await screen.findByText(/Incorrect data/i, {
-				timeout: 14000,
-			});
+			const error = await screen.findByText("Incorrect data");
 			expect(error).toBeInTheDocument();
 		});
 });

@@ -6,14 +6,16 @@ class CatchError extends React.Component {
 	};
 
 	static getDerivedStateFromError(error) {
+		console.log(error);
 		return {
 			hasError: true,
+			error: error.message,
 		};
 	}
 
 	render() {
 		if (this.state.hasError) {
-			return <h1>{this.props.message}</h1>;
+			return <h1>{this.state.error}</h1>;
 		}
 
 		return this.props.children;
