@@ -45,6 +45,7 @@ const Card = () => {
 		} else {
 			setCardName("Your card is not valid");
 		}
+		setCardNumber("");
 	};
 
 	return (
