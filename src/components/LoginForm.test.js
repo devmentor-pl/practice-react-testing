@@ -45,7 +45,7 @@ describe("<LoginForm>", () => {
 		});
 
 		test("should render 'Incorrect data' when submitted with wrong input values", async () => {
-			const mockAuth = jest.fn();
+			const mockAuth = jest.fn(() => false);
 			render(
 				<CatchError>
 					<LoginForm tryAuth={mockAuth} />
