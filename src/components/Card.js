@@ -11,8 +11,9 @@ const Card = () => {
 	};
 
 	const isCardNumberValid = cardNumber => {
-		const digitsArray = cardNumber.split(" ").map(Number);
+		const digitsArray = cardNumber.toString().split("").map(Number);
 		digitsArray.reverse();
+		console.log(digitsArray);
 
 		for (let i = 1; i < digitsArray.length; i += 2) {
 			let multipliedDigit = digitsArray[i] * 2;
@@ -32,7 +33,7 @@ const Card = () => {
 		if (/^3[47][0-9]{13}$/.test(cardNumber)) return "American Express";
 		if (/^3[068][0-9]{12}$/.test(cardNumber))
 			return "Diners Club Carte Blanche";
-		if (/^(3088|3096|3112||3158||3337|3528)[0-9]{12}$/.test(cardNumber))
+		if (/^(3530|3566|3112||3158||3337|3528)[0-9]{12}$/.test(cardNumber))
 			return "JCB";
 		return "Not supported bank card!";
 	};
