@@ -42,14 +42,14 @@ function LoginForm(props) {
         throw new Error('Incorrect data!');
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         const { tryAuth } = props;
         const { login, password } = e.target.elements;
 
-        const authResp = tryAuth(login.value, password.value);
-        if (typeof authResp.then === 'function') { // if return Promise
+        const authResp = await tryAuth(login.value, password.value);
+        if (typeof authResp === 'function') { // if return Promise
             authResp.catch(() => setIsError(true));
         } else if (!authResp) {
             setIsError(true)
