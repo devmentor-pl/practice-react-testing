@@ -18,16 +18,28 @@ describe('<CreditCard />', () => {
 	test('should display the card name if the card number is valid', async () => {
 		render(<CreditCard />);
 
+		const cardNumbers = {
+			AmericanExpress: '370707524318583',
+			Visa: '4111111111111111',
+			MasterCard: '5555555555554444',
+			DinersClub: '30569309025904',
+			JCB: '3528327757709351',
+		};
+
 		const cardNumberField = screen.getByRole('textbox', {
 			name: /Numer karty/i,
 		});
 		const submitBtn = screen.getByRole('button', { name: /Sprawdź/i });
 
-		userEvent.type(cardNumberField, '370707524318583');
-		userEvent.click(submitBtn);
+		for (const [cardType, cardNumber] of Object.entries(cardNumbers)) {
+			userEvent.clear(cardNumberField);
+			userEvent.type(cardNumberField, cardNumber);
+			userEvent.click(submitBtn);
 
-		const cardType = await screen.findByText('Twoja karta: AmericanExpress');
-		expect(cardType).toBeInTheDocument();
+			const cardTypeText = `Twoja karta: ${cardType}`;
+			const cardTypeElement = await screen.findByText(cardTypeText);
+			expect(cardTypeElement).toBeInTheDocument();
+		}
 	});
 
 	test('should display an error if the card number is wrong', async () => {
@@ -42,6 +54,16 @@ describe('<CreditCard />', () => {
 		userEvent.click(submitBtn);
 
 		const message = await screen.findByText('Numer karty jest nieprawidłowy');
+		expect(message).toBeInTheDocument();
+	});
+
+	test('should display an error if you do not enter the card number', async () => {
+		render(<CreditCard />);
+
+		const submitBtn = screen.getByRole('button', { name: /Sprawdź/i });
+		userEvent.click(submitBtn);
+
+		const message = await screen.findByText('Wprowadź numer karty');
 		expect(message).toBeInTheDocument();
 	});
 });
