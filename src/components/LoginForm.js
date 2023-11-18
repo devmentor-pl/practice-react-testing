@@ -43,10 +43,11 @@ function LoginForm(props) {
         e.preventDefault();
 
         const {tryAuth} = props;
+        
         const {login, password} = e.target.elements;
 
         const authResp = tryAuth(login.value, password.value);
-
+        // console.log(authResp)
         if(typeof authResp.then === 'function') { // if return Promise
             authResp.catch(() => setErr(true));
         } else if(!authResp) {
