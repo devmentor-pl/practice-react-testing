@@ -14,7 +14,7 @@ const Md5Form = ({getMd5}) => {
 
         setMd5(await getMd5(text));
     }
-
+ 
     return (
         <section>
             <form onSubmit={handleSubmit}>
