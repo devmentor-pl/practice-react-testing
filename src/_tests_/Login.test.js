@@ -3,23 +3,21 @@ import userEvent from '@testing-library/user-event';
 import LoginForm from "../components/LoginForm";
 import CatchError from "../components/CatchError";
 
-const mock = jest.fn()
-
 xdescribe('LoginForm', () => {
     it('shows login', () => {
-        render(<LoginForm tryAuth={mock} />)
+        render(<LoginForm />)
 
         const login = screen.getByText(/login/i)
         expect(login).toBeInTheDocument()
     })
     it('shows password', () => {
-        render(<LoginForm tryAuth={mock} />)
+        render(<LoginForm />)
 
         const password = screen.getByText(/password/i)
         expect(password).toBeInTheDocument()
     })
     it('shows an error when login is too short', async () => {
-        render(<LoginForm tryAuth={mock} />)
+        render(<LoginForm />)
 
         const loginInput = screen.getByLabelText('login:')
 
@@ -30,7 +28,7 @@ xdescribe('LoginForm', () => {
         expect(error).toBeInTheDocument()
     })
     it('shows an error when password is too short', () => {
-        render(<LoginForm tryAuth={mock} />)
+        render(<LoginForm />)
 
         const password = screen.getByLabelText('password:')
 
@@ -40,6 +38,7 @@ xdescribe('LoginForm', () => {
         expect(error).toBeInTheDocument()
     })
     it('shows error message when tryAuth returns false', async () => {
+        const mock = jest.fn()
         mock.mockReturnValue(false)
 
         render(

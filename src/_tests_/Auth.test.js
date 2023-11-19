@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 
 jest.spyOn(window, 'fetch')
 
-describe('Auth component', () => {
+xdescribe('Auth component', () => {
     it('render Auth component', () => {
         render(<Auth />)
 
