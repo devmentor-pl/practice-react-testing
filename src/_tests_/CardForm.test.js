@@ -60,7 +60,7 @@ describe('CardForm component', () => {
 
         expect(producer).toBeInTheDocument()
     })
-    it('show card producer when number is correct', async () => {
+    it('show card producer (Visa) when number is correct', async () => {
         render(<CardForm />)
 
         const input = screen.getByRole('textbox')
@@ -73,6 +73,17 @@ describe('CardForm component', () => {
 
         expect(producer).toBeInTheDocument()
     })
+    it('show card producer (MasterCard) when number is correct', async () => {
+        render(<CardForm />)
 
+        const input = screen.getByRole('textbox')
+        const button = screen.getByRole('button')
 
+        userEvent.type(input, '5111111111111118')
+        userEvent.click(button)
+
+        const producer = await screen.findByText('Card Producer: MasterCard')
+
+        expect(producer).toBeInTheDocument()
+    })
 })

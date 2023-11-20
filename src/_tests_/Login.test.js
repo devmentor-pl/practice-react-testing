@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import { render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import LoginForm from "../components/LoginForm";
@@ -27,14 +28,14 @@ xdescribe('LoginForm', () => {
 
         expect(error).toBeInTheDocument()
     })
-    it('shows an error when password is too short', () => {
+    it('shows an error when password is too short', async () => {
         render(<LoginForm />)
 
         const password = screen.getByLabelText('password:')
 
         userEvent.type(password, 'aaa')
 
-        const error = screen.getByText('The field is too short!')
+        const error = await screen.findByText('The field is too short!')
         expect(error).toBeInTheDocument()
     })
     it('shows error message when tryAuth returns false', async () => {
@@ -53,5 +54,20 @@ xdescribe('LoginForm', () => {
         const error = await screen.findByText('Incorrect data!')
 
         expect(error).toBeInTheDocument()
+    })
+    it('shows error message when tryAuth returns false #2', async () => {
+        expect.assertions(1);
+
+        const mock = jest.fn();
+        mock.mockReturnValueOnce(false);
+
+        render(<LoginForm tryAuth={mock} />);
+
+        const button = await screen.findByRole('button');
+        try {
+            userEvent.click(button);
+        } catch (e) {
+            expect(e.message).toBe('Incorrect data!');
+        }
     })
 }) 

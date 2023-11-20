@@ -1,19 +1,28 @@
-/* eslint-disable testing-library/no-debugging-utils */
 import { screen, render } from "@testing-library/react";
 import Auth from "../components/Auth";
 import userEvent from "@testing-library/user-event";
 
-jest.spyOn(window, 'fetch')
+const setup = () => {
+    render(<Auth />)
 
-xdescribe('Auth component', () => {
+    const spy = jest.spyOn(window, 'fetch')
+
+    const loginInput = screen.getByLabelText(/login/i)
+    const passwordInput = screen.getByLabelText(/password/i)
+    const button = screen.getByRole('button')
+
+    return { loginInput, passwordInput, button, spy }
+}
+
+describe('Auth component', () => {
     it('render Auth component', () => {
-        render(<Auth />)
+        const { loginInput, passwordInput } = setup()
 
-        screen.debug()
-        expect(screen.getByText(/login/i)).toBeInTheDocument()
+        expect(loginInput).toBeInTheDocument()
+        expect(passwordInput).toBeInTheDocument()
     })
     it('display heading when correct login and password', async () => {
-        render(<Auth />)
+        const { loginInput, passwordInput, button, spy } = setup()
 
         const login = 'jan@domena.pl'
         const password = 'janeczek'
@@ -25,10 +34,6 @@ xdescribe('Auth component', () => {
             }
         })
 
-        const loginInput = screen.getByLabelText(/login/i)
-        const passwordInput = screen.getByLabelText(/password/i)
-        const button = screen.getByRole('button')
-
         userEvent.type(loginInput, login)
         userEvent.type(passwordInput, password)
 
@@ -36,12 +41,13 @@ xdescribe('Auth component', () => {
 
 
         const welcomeText = await screen.findByText(`Jesteś zalogowany jako: ${login}`);
-        // const welcomeText = await screen.findByRole('heading', { name: /jesteś zalogowany jako: jan@domena\.pl/i })
 
         expect(welcomeText).toBeInTheDocument()
+
+        spy.mockClear()
     })
     it('not display heading when incorrect login and password', async () => {
-        render(<Auth />)
+        const { loginInput, passwordInput, button, spy } = setup()
 
         const login = 'jan@domena.pl'
         const password = 'janeczek123'
@@ -53,10 +59,6 @@ xdescribe('Auth component', () => {
             }
         })
 
-        const loginInput = screen.getByLabelText(/login/i)
-        const passwordInput = screen.getByLabelText(/password/i)
-        const button = screen.getByRole('button')
-
         userEvent.type(loginInput, login)
         userEvent.type(passwordInput, password)
         userEvent.click(button)
@@ -64,5 +66,12 @@ xdescribe('Auth component', () => {
         const welcomeText = screen.queryByText(`Jesteś zalogowany jako: ${login}`);
 
         expect(welcomeText).not.toBeInTheDocument()
+        expect(window.fetch).toHaveBeenCalled()
+        expect(window.fetch).toHaveBeenCalledWith('https://api.hashify.net/hash/md5/hex', {
+            method: 'POST',
+            body: password,
+        })
+
+        spy.mockClear()
     })
 })

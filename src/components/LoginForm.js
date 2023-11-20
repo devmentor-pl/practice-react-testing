@@ -21,16 +21,20 @@ function LoginForm(props) {
         }
     }
 
+    function setUserData(field, value, error = '') {
+        setUser({ ...user, [field]: { value, error } });
+    }
+
     function handleChange(e) {
         const {name: field, value} = e.target;
         if(typeof user[field] !== 'undefined') {
 
             try {
                 checkValue(value);
-                setUser({...user, [field]: {value, error: ''} });
+                setUserData(field, value)
             }
             catch (err) {
-                setUser({ ...user, [field]: { value, error: err.message } });
+                setUserData(field, value, err.message)
             }
         }
     }
