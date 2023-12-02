@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useErrorHandler } from 'react-error-boundary';
 
 function LoginForm(props) {
 	const userDefault = {
@@ -12,6 +13,7 @@ function LoginForm(props) {
 		},
 	};
 
+	const errorHandler = useErrorHandler();
 	const [user, setUser] = useState(userDefault);
 
 	function checkValue(value) {
@@ -39,14 +41,19 @@ function LoginForm(props) {
 	function handleSubmit(e) {
 		e.preventDefault();
 
-		const { tryAuth } = props;
+		const { tryAuth, onError } = props;
 		const { login, password } = e.target.elements;
 
 		const authResp = tryAuth(login.value, password.value);
 		if (typeof authResp.then === 'function') {
-			authResp.catch(() => throwError());
+			authResp.catch((error) => {
+				errorHandler(throwError);
+				onError(error.message);
+			});
 		} else if (!authResp) {
-			throwError();
+			errorHandler(throwError);
+
+			onError('Incorrect data!');// jak w tym miejscu przechwycic message funkcji ktora wyrzuca blad czyli throwError()?
 		}
 	}
 
@@ -83,107 +90,3 @@ function LoginForm(props) {
 }
 
 export default LoginForm;
-// import React from 'react';
-
-// class LoginForm extends React.Component {
-// 	state = {
-// 		user: {
-// 			login: {
-// 				value: '',
-// 				error: '',
-// 			},
-// 			password: {
-// 				value: '',
-// 				error: '',
-// 			},
-// 		},
-// 		formError: null,
-// 	};
-
-// 	static getDerivedStateFromError(error) {
-// 		console.log(`i tak zadnego bledu nie przechytuje...`);
-// 		return { formError: error.message };
-// 	}
-
-// 	checkValue(value) {
-// 		if (value.length <= 3) {
-// 			throw new Error('The field is too short!');
-// 		}
-// 	}
-
-// 	handleChange = (e) => {
-// 		const { name: field, value } = e.target;
-// 		try {
-// 			if (typeof this.state.user[field] !== 'undefined') {
-// 				this.checkValue(value);
-// 				this.setState({
-// 					user: { ...this.state.user, [field]: { value, error: '' } },
-// 					formError: null,
-// 				});
-// 			}
-// 		} catch (error) {
-// 			this.setState({
-// 				user: { ...this.state.user, [field]: { value, error: error.message } },
-// 				formError: null,
-// 			});
-// 		}
-// 	};
-
-// 	throwError() {
-// 		throw new Error('Incorrect data!');
-// 	}
-
-// 	handleSubmit = (e) => {
-// 		e.preventDefault();
-
-// 		const { tryAuth } = this.props;
-// 		const { login, password } = e.target.elements;
-
-// 		const authResp = tryAuth(login.value, password.value);
-// 		if (typeof authResp.then === 'function') {
-// 			authResp.catch(() => this.throwError());
-// 		} else if (!authResp) {
-// 			this.throwError();
-// 		}
-// 	};
-
-// 	render() {
-// 		const { login, password } = this.state.user;
-
-// 		if (this.state.formError) {
-// 			return <h1>{this.state.formError}</h1>;
-// 		}
-
-// 		return (
-// 			<form onSubmit={this.handleSubmit}>
-// 				<p>
-// 					<label>
-// 						login:{' '}
-// 						<input
-// 							name='login'
-// 							value={login.value}
-// 							onChange={(e) => this.handleChange(e)}
-// 						/>
-// 						{login.error && <strong>{login.error}</strong>}
-// 					</label>
-// 				</p>
-// 				<p>
-// 					<label>
-// 						password:{' '}
-// 						<input
-// 							name='password'
-// 							value={password.value}
-// 							onChange={(e) => this.handleChange(e)}
-// 						/>
-// 						{password.error && <strong>{password.error}</strong>}
-// 					</label>
-// 				</p>
-// 				<p>
-// 					<button>send</button>
-// 				</p>
-// 			</form>
-// 		);
-// 	}
-// }
-
-// export default LoginForm;

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import LoginForm from './LoginForm';
+import Task01 from '../Task01';
 
 const tryAuthMock = jest.fn();
-
 
 describe('<LoginForm />', () => {
 	describe('Rendering Elements', () => {
@@ -49,18 +49,14 @@ describe('<LoginForm />', () => {
 	});
 
 	describe('Testing OnSubmit', () => {
-		test('tryAuth gets 0 params', async () => {
-			// ten test nie ma sensu...
-			tryAuthMock.mockResolvedValue(undefined);
-
-			render(<LoginForm tryAuth={tryAuthMock} />);
-
+		test('displays error message when form is submitted with empty inputs', async () => {
+			render(<Task01 />);
 			fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
-			expect(tryAuthMock).toHaveBeenCalledWith('', '');
+			await expect(screen.getByText('Incorrect data!')).toBeInTheDocument();
 		});
 		test('tryAuth gets only 1 param', async () => {
-			tryAuthMock.mockResolvedValue(undefined);
+			const tryAuthMock = jest.fn((login, password) => Promise.resolve());
 
 			render(<LoginForm tryAuth={tryAuthMock} />);
 
@@ -70,9 +66,9 @@ describe('<LoginForm />', () => {
 
 			expect(tryAuthMock).toHaveBeenCalledWith('aasa44', '');
 		});
-		test('tryAuth gets 2 params', async () => {
-			tryAuthMock.mockResolvedValue(undefined);
 
+		test('tryAuth gets 2 params', async () => {
+			const tryAuthMock = jest.fn((login, password) => Promise.resolve());
 			render(<LoginForm tryAuth={tryAuthMock} />);
 
 			fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'aasa44' } });
@@ -82,28 +78,22 @@ describe('<LoginForm />', () => {
 
 			expect(tryAuthMock).toHaveBeenCalledWith('aasa44', 'aasa44');
 		});
-		// test('handles async tryAuth with resolved promise', async () => {
-        //     // to nie ma sensu skoro zaznaczam true na sztywno?
-        //     // czy ja nie powinenem zrobic mocka ktory bedzie funkcja tryAuth i bedzie zwracac true?
-		// 	tryAuthMock.mockResolvedValue(true);
 
-		// 	render(<LoginForm tryAuth={tryAuthMock} />);
+		test('tryAuth gets only 1 param(password) and droped error', async () => {
+			const tryAuthMock = jest.fn((login, password) => Promise.resolve);
+			render(<Task01 />);
+			fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'aasa44' } });
+			fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
-		// 	fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'asccs45' } });
-		// 	fireEvent.change(screen.getByLabelText(/login/i), { target: { value: 'asscc45' } });
+			await expect(screen.getByText('Incorrect data!')).toBeInTheDocument();
+		});
+		test('tryAuth gets only 1 param(login) and droped error', async () => {
+			const tryAuthMock = jest.fn((login, password) => Promise.resolve);
+			render(<Task01 />);
+			fireEvent.change(screen.getByLabelText(/login/i), { target: { value: 'aasa44' } });
+			fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
-		// 	await expect(screen.getByRole('button', { name: 'send' })).resolves.toBeTruthy();
-		// });
-
-		// test('handles async tryAuth with rejected promise', async () => {
-		// 	tryAuthMock.mockRejectedValue(false);
-
-		// 	render(<LoginForm tryAuth={tryAuthMock} />);
-
-		// 	fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'ass45' } });
-		// 	fireEvent.change(screen.getByLabelText(/login/i), { target: { value: 'ass45' } });
-
-		// 	await expect(screen.getByRole('button', { name: 'send' })).rejects.toThrow('Incorrect data!');
-		// });
+			await expect(screen.getByText('Incorrect data!')).toBeInTheDocument();
+		});
 	});
 });

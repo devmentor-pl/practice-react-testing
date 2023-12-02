@@ -8,8 +8,9 @@ class CatchError extends React.Component {
 	}
 
 	render() {
+		const { errorMessage } = this.props;
 		if (this.state.hasError) {
-			return <h1>something went wrong...</h1>;
+			return <h1>{errorMessage}</h1>;
 		}
 
 		return this.props.children;
