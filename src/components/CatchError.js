@@ -9,7 +9,7 @@ class CatchError extends Component {
 
     render() {
         if (this.state.hasError) {
-            return <h1>Invalida form data</h1>;
+            return <h1>Incorrect data</h1>;
         }
 
         return this.props.children;
