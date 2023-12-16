@@ -11,7 +11,6 @@ const Md5Form = ({getMd5}) => {
 
     async function handleSubmit(e) {
         e.preventDefault();
-
         setMd5(await getMd5(text));
     }
 
