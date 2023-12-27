@@ -4,22 +4,25 @@ import Task03 from './Task03';
 import Task04 from './Task04';
 import Task05 from './Task05';
 
-function App() {
+import CatchError from './components/CatchError';
 
+function App() {
     function tryAuth(login, password) {
         return login.length + password.length >= 6;
     }
 
     return (
-        <div className="App">
-            <Task01 tryAuth={ tryAuth } />
-            <hr/>
+        <div className='App'>
+            <CatchError>
+                <Task01 tryAuth={tryAuth} />
+            </CatchError>
+            <hr />
             <Task02 />
-            <hr/>
+            <hr />
             <Task03 />
-            <hr/>
+            <hr />
             <Task04 />
-            <hr/>
+            <hr />
             <Task05 />
         </div>
     );
