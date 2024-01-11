@@ -1,25 +1,81 @@
-import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Md5Form from './Md5Form';
+import { getMd5 } from '../providers/md5Provider';
+import { wait } from '@testing-library/user-event/dist/utils';
 
 describe('Md5Form', () => {
-	it('should update state when text is typed into the input', async () => {
-		render(<Md5Form getMd5={jest.fn()} />);
+	test('input works -> should create a span element with class data-text', async () => {
+		expect.assertions(2);
+		render(<Md5Form />);
 
-		// Pobierz pole wejściowe
-		const inputElement = screen.getByRole('textbox');
+		const value = 'abcd';
+		const input = await screen.findByRole('textbox');
+		fireEvent.change(input, { target: { value } });
 
-		// Wprowadź tekst do pola wejściowego
-		fireEvent.change(inputElement, { target: { value: 'example' } });
+		const span = await screen.findByText(value);
 
-		// Sprawdź, czy stan komponentu został zaktualizowany
-		expect(screen.getByText(/example/)).toBeInTheDocument();
-		expect(screen.queryByText(/md5-result/)).toBeNull(); // Sprawdź, czy nie ma wyniku md5
+		expect(span).toHaveClass('data-text');
+		expect(span.textContent).toBe(value);
+	});
+	test('submitting should load data to data-md5 class element', async () => {
+		expect.assertions(2);
+		render(<Md5Form getMd5={getMd5} />);
 
-		// Możesz również sprawdzić, czy stan komponentu jest zgodny z oczekiwaniami, na przykład:
-		// expect(component.state().text).toBe('example');
-		// expect(component.state().md5).toBe('');
+		const value = 'abcd';
+		const md5Value = 'e2fc714c4727ee9395f324cd2e7f331f';
 
-		// Inne testy związane z interakcją użytkownika możesz dodać tutaj
+		const spy = jest.spyOn(window, 'fetch');
+		window.fetch.mockResolvedValue({
+			ok: true,
+			json: async () => {
+				return { Digest: md5Value };
+			},
+		});
+
+		const input = await screen.findByRole('textbox');
+		fireEvent.change(input, { target: { value } });
+
+		const button = await screen.findByRole('button');
+		fireEvent.click(button);
+
+		await waitFor(async () => {
+			const strong = await screen.findByText(md5Value);
+			expect(strong).toBeInTheDocument();
+			expect(strong).toHaveClass('data-md5');
+		});
+
+		spy.mockClear();
+	});
+	test('onChange input should clear md5 hash translate', async () => {
+		render(<Md5Form getMd5={getMd5} />);
+
+		const value = 'abcd';
+		const md5Value = 'e2fc714c4727ee9395f324cd2e7f331f';
+
+		const spy = jest.spyOn(window, 'fetch');
+		window.fetch.mockResolvedValue({
+			ok: true,
+			json: async () => {
+				return { Digest: md5Value };
+			},
+		});
+
+		const input = await screen.findByRole('textbox');
+		fireEvent.change(input, { target: { value } });
+
+		const button = await screen.findByRole('button');
+		fireEvent.click(button);
+
+		await waitFor(async () => {
+			const strong = await screen.findByText(md5Value);
+			expect(strong).toBeInTheDocument();
+		});
+		await waitFor(async () => {
+			const strong = await screen.findByText(md5Value);
+			fireEvent.change(input, { target: { value: 'zmiana' } });
+			expect(strong.textContent).toBe('');
+		});
+		spy.mockClear();
 	});
 });
