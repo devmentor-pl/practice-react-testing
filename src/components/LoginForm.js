@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useErrorHandler } from 'react-error-boundary';
 
 function LoginForm(props) {
 	const userDefault = {
@@ -13,8 +12,8 @@ function LoginForm(props) {
 		},
 	};
 
-	const errorHandler = useErrorHandler();
 	const [user, setUser] = useState(userDefault);
+	const [isError, setIsError] = useState(false);
 
 	function checkValue(value) {
 		if (value.length <= 3) {
@@ -22,15 +21,19 @@ function LoginForm(props) {
 		}
 	}
 
+	function setUserDate(field, value, error = '') {
+		setUser({ ...user, [field]: { value, error } });
+	}
+
 	function handleChange(e) {
 		const { name: field, value } = e.target;
-		try {
-			if (typeof user[field] !== 'undefined') {
+		if (typeof user[field] !== 'undefined') {
+			try {
 				checkValue(value);
-				setUser({ ...user, [field]: { value, error: '' } });
+				setUserDate(field, value);
+			} catch (e) {
+				setUserDate(field, value, e.message);
 			}
-		} catch (error) {
-			setUser({ ...user, [field]: { value, error: error.message } });
 		}
 	}
 
@@ -41,23 +44,22 @@ function LoginForm(props) {
 	function handleSubmit(e) {
 		e.preventDefault();
 
-		const { tryAuth, onError } = props;
+		const { tryAuth } = props;
 		const { login, password } = e.target.elements;
 
 		const authResp = tryAuth(login.value, password.value);
 		if (typeof authResp.then === 'function') {
-			authResp.catch((error) => {
-				errorHandler(throwError);
-				onError(error.message);
-			});
+			authResp.catch(() => setIsError(true));
 		} else if (!authResp) {
-			errorHandler(throwError);
-
-			onError('Incorrect data!');// jak w tym miejscu przechwycic message funkcji ktora wyrzuca blad czyli throwError()?
+			setIsError(true);
 		}
 	}
 
 	const { login, password } = user;
+
+	if (isError) {
+		throwError();
+	}
 	return (
 		<form onSubmit={handleSubmit}>
 			<p>
