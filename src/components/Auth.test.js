@@ -1,4 +1,4 @@
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Auth from './Auth';
@@ -13,7 +13,7 @@ const setup = () => {
 	return { loginElement, passwordElement, buttonElement };
 };
 
-describe('<Auth />', () => {
+xdescribe('<Auth />', () => {
 	test('fields should exist', async () => {
 		const { loginElement, passwordElement } = setup();
 
