@@ -3,7 +3,7 @@ import Md5Form from './Md5Form';
 import { getMd5 } from '../providers/md5Provider';
 
 
-xdescribe('Md5Form', () => {
+describe('Md5Form', () => {
 	test('input works -> should create a span element with class data-text', async () => {
 		expect.assertions(2);
 		render(<Md5Form />);

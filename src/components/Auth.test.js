@@ -13,7 +13,7 @@ const setup = () => {
 	return { loginElement, passwordElement, buttonElement };
 };
 
-xdescribe('<Auth />', () => {
+describe('<Auth />', () => {
 	test('fields should exist', async () => {
 		const { loginElement, passwordElement } = setup();
 

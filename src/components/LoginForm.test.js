@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import LoginForm from './LoginForm';
 
-xdescribe('<loginForm />', () => {
+describe('<loginForm />', () => {
 	describe('Rendering Elements', () => {
 		test('input named login rendered correctly', () => {
 			expect.assertions(1);

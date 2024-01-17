@@ -1,4 +1,4 @@
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, screen  } from '@testing-library/react';
 import CreditCard from './CreditCard';
 import userEvent from '@testing-library/user-event';
 
