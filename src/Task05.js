@@ -1,10 +1,11 @@
 import React from 'react';
+import BankAccount from './components/BankAccount';
 
 const Task05 = () => {
     return (
         <section>
             <h1>Task05</h1>
-            <p>Tutaj komponent dla kart kredytowych.</p>
+            <BankAccount/>
         </section>
     );
 };
