@@ -13,6 +13,7 @@ function LoginForm(props) {
     }
 
     const [user, setUser] = useState(userDefault);
+    const [err, setErr] = useState(false)
 
     function checkValue(value) {
         if(value.length <= 3)  {
@@ -20,11 +21,21 @@ function LoginForm(props) {
         }
     }
 
+    function setUserData(field, value, error = '') {
+        setUser({ ...user, [field]: { value, error } });
+    }
+
     function handleChange(e) {
         const {name: field, value} = e.target;
         if(typeof user[field] !== 'undefined') {
-            checkValue(value);
-            setUser({...user, [field]: {value, error: ''} });
+
+            try {
+                checkValue(value);
+                setUserData(field, value)
+            }
+            catch (err) {
+                setUserData(field, value, err.message)
+            }
         }
     }
 
@@ -36,14 +47,20 @@ function LoginForm(props) {
         e.preventDefault();
 
         const {tryAuth} = props;
+        
         const {login, password} = e.target.elements;
 
         const authResp = tryAuth(login.value, password.value);
+        // console.log(authResp)
         if(typeof authResp.then === 'function') { // if return Promise
-            authResp.catch(() => throwError() );
+            authResp.catch(() => setErr(true));
         } else if(!authResp) {
-            throwError()
+            setErr(true)
         }
+    }
+
+    if (err) {
+        throwError()
     }
 
     const {login, password} = user;
