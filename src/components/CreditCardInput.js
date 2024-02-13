@@ -1,36 +1,52 @@
 import React, { useState } from 'react';
 
 const cardProviders = {
-  Visa: ['40', '41', '42', '43', '44', '45', '46', '47', '48', '49'],
-  MasterCard: ['51', '52', '53', '54', '55'],
-  AmericanExpress: ['34', '37'],
-  DinersClub: ['30', '36', '38'],
-  JCB: ['3088', '3096', '3112', '3158', '3337', '3528'],
+  Visa: {
+    prefixes: ['40', '41', '42', '43', '44', '45', '46', '47', '48', '49'],
+    lengthFrom: 13,
+    lengthTo: 16,
+  },
+  MasterCard: {
+    prefixes: ['51', '52', '53', '54', '55'],
+    lengthFrom: 16,
+    lengthTo: 16,
+  },
+  AmericanExpress: {
+    prefixes: ['34', '37'],
+    lengthFrom: 15,
+    lengthTo: 15,
+  },
+  DinersClub: {
+    prefixes: ['30', '36', '38'],
+    lengthFrom: 14,
+    lengthTo: 14,
+  },
+  JCB: {
+    prefixes: ['3088', '3096', '3112', '3158', '3337', '3528'],
+    lengthFrom: 16,
+    lengthTo: 19,
+  },
 };
 
 const getCardType = (number) => {
   let matchedProvider = 'unknown';
   let maxLengthMatch = 0;
 
-  for (const [provider, prefixes] of Object.entries(cardProviders)) {
-    const sortedPrefixes = prefixes.sort((a, b) => b.length - a.length);
-
-    for (const prefix of sortedPrefixes) {
+  Object.entries(cardProviders).forEach(([provider, { prefixes }]) => {
+    prefixes.forEach((prefix) => {
       if (number.startsWith(prefix) && prefix.length > maxLengthMatch) {
         matchedProvider = provider;
         maxLengthMatch = prefix.length;
       }
-    }
-  }
+    });
+  });
 
   return matchedProvider;
 };
 
-const formatCardNumber = (number) => {
+const formatCardNumber = (number, maxLength = 16) => {
   const cleanNumber = number.replace(/\D/g, '');
-
-  const limitedNumber = cleanNumber.slice(0, 16);
-
+  const limitedNumber = cleanNumber.slice(0, maxLength);
   return limitedNumber.replace(/(.{4})/g, '$1 ').trim();
 };
 
@@ -46,35 +62,21 @@ const CreditCardInput = () => {
     const onlyNums = value.replace(/\D/g, '');
 
     const detectedType = getCardType(onlyNums);
-    let maxLength;
-    switch (detectedType) {
-      case 'AmericanExpress':
-        maxLength = 15;
-        break;
-      case 'DinersClub':
-        maxLength = 14;
-        break;
-      default:
-        maxLength = 16;
-    }
+    const providerInfo = cardProviders[detectedType];
+
+    const maxLength = providerInfo ? providerInfo.lengthTo : 16;
 
     const truncatedNums = onlyNums.slice(0, maxLength);
-    const formattedNumber = formatCardNumber(truncatedNums);
+    const formattedNumber = formatCardNumber(truncatedNums, maxLength);
 
     setCardNumber(formattedNumber);
     setCardType(detectedType);
 
     let cardLengthValid = false;
-    switch (detectedType) {
-      case 'AmericanExpress':
-        cardLengthValid = truncatedNums.length === 15;
-        break;
-      case 'DinersClub':
-        cardLengthValid = truncatedNums.length === 14;
-        break;
-      default:
-        cardLengthValid =
-          truncatedNums.length >= 13 && truncatedNums.length <= 16;
+    if (providerInfo) {
+      cardLengthValid =
+        truncatedNums.length >= providerInfo.lengthFrom &&
+        truncatedNums.length <= providerInfo.lengthTo;
     }
 
     if (detectedType === 'unknown') {
