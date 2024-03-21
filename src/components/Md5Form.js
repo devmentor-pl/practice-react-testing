@@ -20,7 +20,7 @@ const Md5Form = ({getMd5}) => {
             <form onSubmit={handleSubmit}>
                 <p>
                     <label>
-                        <input value={text} onChange={handleChange} />
+                    <input value={text} onChange={handleChange} aria-label="input" />
                     </label>
                 </p>
                 <p><button>send</button></p>
