@@ -12,7 +12,10 @@ function LoginForm(props) {
         }
     }
 
+
+
     const [user, setUser] = useState(userDefault);
+    const [hasError, setHasError] = useState(false)
 
     function checkValue(value) {
         if(value.length <= 3)  {
@@ -21,33 +24,39 @@ function LoginForm(props) {
     }
 
     function handleChange(e) {
-        const {name: field, value} = e.target;
-        if(typeof user[field] !== 'undefined') {
+        const { name, value } = e.target;
+        try {
             checkValue(value);
-            setUser({...user, [field]: {value, error: ''} });
+            setUser((prevState) => ({
+                ...prevState,
+                [name]: { value, error: '' }
+            }));
+        } catch (error) {
+            setUser((prevState) => ({
+                ...prevState,
+                [name]: { value, error: error.message }
+            }));
         }
-    }
-
-    function throwError() {
-        throw new Error('Incorrect data!');
     }
 
     function handleSubmit(e) {
         e.preventDefault();
-
         const {tryAuth} = props;
         const {login, password} = e.target.elements;
 
         const authResp = tryAuth(login.value, password.value);
         if(typeof authResp.then === 'function') { // if return Promise
-            authResp.catch(() => throwError() );
+            authResp.catch(() => setHasError(true) );
         } else if(!authResp) {
-            throwError()
+            setHasError(true)
         }
     }
 
     const {login, password} = user;
+    
+    if(hasError){ throw new Error('Incorrect data')}
     return (
+
         <form onSubmit={ handleSubmit }>
             <p>
                 <label>
