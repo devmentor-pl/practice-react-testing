@@ -13,55 +13,59 @@ function LoginForm(props) {
     }
 
     const [user, setUser] = useState(userDefault);
+    const [isError, setIsError] = useState(false);
 
     function checkValue(value) {
-        if(value.length <= 3)  {
-            throw new Error('The field is too short!');
+        if (value.length <= 3) {
+            return 'The field is too short!';
         }
+        return '';
     }
 
     function handleChange(e) {
-        const {name: field, value} = e.target;
-        if(typeof user[field] !== 'undefined') {
-            checkValue(value);
-            setUser({...user, [field]: {value, error: ''} });
+        const { name: field, value } = e.target;
+        if (typeof user[field] !== 'undefined') {
+            const errorMessage = checkValue(value);
+            setUserData(field, value, errorMessage);
         }
     }
 
-    function throwError() {
-        throw new Error('Incorrect data!');
-    }
+    const setUserData = (field, value, error = '') => {
+        setUser(prevUser => ({ ...prevUser, [field]: { value, error } }));
+    };
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
+        const { tryAuth } = props;
+        const { login, password } = e.target.elements;
 
-        const {tryAuth} = props;
-        const {login, password} = e.target.elements;
-
-        const authResp = tryAuth(login.value, password.value);
-        if(typeof authResp.then === 'function') { // if return Promise
-            authResp.catch(() => throwError() );
-        } else if(!authResp) {
-            throwError()
+        try {
+            const authResp = await tryAuth(login.value, password.value);
+            if (!authResp) {
+                setIsError(true);
+            }
+        } catch (error) {
+            setIsError(true);
         }
     }
 
-    const {login, password} = user;
+    const { login, password } = user;
     return (
-        <form onSubmit={ handleSubmit }>
+        <form onSubmit={handleSubmit}>
             <p>
                 <label>
-                    login: <input name="login" value={ login.value } onChange={e => handleChange(e)} />
-                    { login.error && <strong>{ login.error }</strong> }
+                    login: <input name="login" value={login.value} onChange={handleChange} />
+                    {login.error && <strong>{login.error}</strong>}
                 </label>
             </p>
             <p>
                 <label>
-                    password: <input name="password" value={ password.value } onChange={e => handleChange(e)} />
-                    { password.error && <strong>{ password.error }</strong> }
+                    password: <input name="password" value={password.value} onChange={handleChange} />
+                    {password.error && <strong>{password.error}</strong>}
                 </label>
             </p>
-            <p><button>send</button></p>
+            {isError && <p>Incorrect data or authentication failed.</p>}
+            <p><button type="submit">send</button></p>
         </form>
     );
 }
