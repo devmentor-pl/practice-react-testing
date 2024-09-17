@@ -13,6 +13,11 @@ function LoginForm(props) {
     }
 
     const [user, setUser] = useState(userDefault);
+    const [submitError, setSubmitError] = useState(false);
+//wykrywanie błedów w onSubmit za pomocą stanu, ponieważ Error Boundary nie działa na wyjątki rzucane w funkcjach obsługujących zdarzenia
+    if (submitError) {
+        throwError();
+    }
 
     function checkValue(value) {
         if(value.length <= 3)  {
@@ -23,8 +28,12 @@ function LoginForm(props) {
     function handleChange(e) {
         const {name: field, value} = e.target;
         if(typeof user[field] !== 'undefined') {
-            checkValue(value);
-            setUser({...user, [field]: {value, error: ''} });
+            try {
+                checkValue(value);
+                setUser({...user, [field]: {value, error: ''} });
+            } catch(err) {
+                setUser({ ...user, [field]: { value, error: err.message }})
+            }
         }
     }
 
@@ -40,9 +49,9 @@ function LoginForm(props) {
 
         const authResp = tryAuth(login.value, password.value);
         if(typeof authResp.then === 'function') { // if return Promise
-            authResp.catch(() => throwError() );
+            authResp.catch(() => setSubmitError(true) );
         } else if(!authResp) {
-            throwError()
+            setSubmitError(true)
         }
     }
 
