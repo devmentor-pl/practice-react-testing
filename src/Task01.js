@@ -1,5 +1,6 @@
 import React from 'react';
 import LoginForm from './components/LoginForm';
+import Catcher from './components/Catcher'
 
 const Task01 = () => {
     function tryAuth(login, password) {
@@ -7,11 +8,13 @@ const Task01 = () => {
     }
 
     return (
-        <section>
-            <h1>Task01</h1>
-            <LoginForm tryAuth={ tryAuth }/>
-        </section>
-    );
+			<section>
+				<h1>Task01</h1>
+				<Catcher>
+					<LoginForm tryAuth={tryAuth} />
+				</Catcher>
+			</section>
+		)
 };
 
 export default Task01;
