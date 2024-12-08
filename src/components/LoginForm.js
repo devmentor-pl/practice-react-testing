@@ -13,40 +13,49 @@ function LoginForm(props) {
     }
 
     const [user, setUser] = useState(userDefault);
+    const [error, setError] = useState(false);
 
     function checkValue(value) {
-        if(value.length <= 3)  {
-            throw new Error('The field is too short!');
-        }
+      if (value.length <= 3) {
+        throw new Error("The field is too short!");
+      }
     }
 
     function handleChange(e) {
-        const {name: field, value} = e.target;
-        if(typeof user[field] !== 'undefined') {
-            checkValue(value);
-            setUser({...user, [field]: {value, error: ''} });
+      const { name: field, value } = e.target;
+      if (typeof user[field] !== "undefined") {
+        try {
+          checkValue(value);
+          setUser({ ...user, [field]: { value, error: "" } });
+        } catch (err) {
+          setUser({ ...user, [field]: { value, error: err.message } });
         }
+      }
     }
 
     function throwError() {
-        throw new Error('Incorrect data!');
+      throw new Error("Incorrect data!");
     }
 
     function handleSubmit(e) {
-        e.preventDefault();
+      e.preventDefault();
 
-        const {tryAuth} = props;
-        const {login, password} = e.target.elements;
+      const { tryAuth } = props;
+      const { login, password } = e.target.elements;
 
-        const authResp = tryAuth(login.value, password.value);
-        if(typeof authResp.then === 'function') { // if return Promise
-            authResp.catch(() => throwError() );
-        } else if(!authResp) {
-            throwError()
-        }
+      const authResp = tryAuth(login.value, password.value);
+      if (typeof authResp.then === "function") {
+        // if return Promise
+        authResp.catch(() => setError(true));
+      } else if (!authResp) {
+        setError(true);
+      }
     }
 
-    const {login, password} = user;
+    const { login, password } = user;
+    if (error) {
+      throwError();
+    }
     return (
         <form onSubmit={ handleSubmit }>
             <p>
